@@ -83,7 +83,7 @@ def test_attestation_record() -> None:
         approved_by="https://github.com/zargham",
         subject=(
             "https://rtm.example/artifact/a1",
-            "https://open-services.net/ns/rm#satisfies",
+            "https://flexo-rtm.dev/ontology#addresses",
             "https://rtm.example/req/r1",
         ),
         attestation_class="SatisfactionAttestation",

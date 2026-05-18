@@ -10,7 +10,7 @@ TURTLE_A = """
 @prefix ex: <https://rtm.example/> .
 @prefix rtm: <https://rtm.example/ontology#> .
 ex:r1 a rtm:Requirement ; rtm:label "r1" .
-ex:a1 a rtm:Artifact ; rtm:satisfies ex:r1 .
+ex:a1 a rtm:Artifact ; rtm:addresses ex:r1 .
 """
 
 # Semantically identical: reordered prefixes, reordered statements, different whitespace.
@@ -20,7 +20,7 @@ TURTLE_B = """
 
 ex:a1
     a rtm:Artifact ;
-    rtm:satisfies ex:r1 .
+    rtm:addresses ex:r1 .
 
 ex:r1   a   rtm:Requirement ;   rtm:label "r1" .
 """

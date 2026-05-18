@@ -15,8 +15,8 @@ TURTLE = """
 ex:r1 a rtm:Requirement .
 ex:r2 a rtm:Requirement .
 ex:r3 a rtm:Requirement .
-ex:a1 a rtm:Artifact ; rtm:satisfies ex:r1 .
-ex:a2 a rtm:Artifact ; rtm:satisfies ex:r2 .
+ex:a1 a rtm:Artifact ; rtm:addresses ex:r1 .
+ex:a2 a rtm:Artifact ; rtm:addresses ex:r2 .
 """
 
 

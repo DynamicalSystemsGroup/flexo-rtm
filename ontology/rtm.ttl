@@ -94,7 +94,7 @@ rtm:AdequacyAttestation a owl:Class ;
     rdfs:subClassOf rtm:Attestation .
 
 rtm:SatisfactionAttestation a owl:Class ;
-    rdfs:label "Satisfaction attestation (over an rtm:satisfies edge)" ;
+    rdfs:label "Satisfaction attestation (over an rtm:addresses edge)" ;
     rdfs:subClassOf rtm:Attestation .
 
 rtm:Scope a owl:Class ;
@@ -103,6 +103,18 @@ rtm:Scope a owl:Class ;
 rtm:SufficiencyAttestation a owl:Class ;
     rdfs:label "Sufficiency attestation (over an artifact/requirement pair)" ;
     rdfs:subClassOf rtm:Attestation .
+
+rtm:addresses a owl:ObjectProperty ;
+    rdfs:label "addresses (artifact → requirement)" ;
+    rdfs:comment """An artifact ADDRESSES a requirement — it provides evidence bearing on
+whether the requirement is met. Addressing is structural and per-edge.
+
+SATISFACTION is a separate, stronger epistemic claim: a named human, synthesizing
+the available evidence, attests that a requirement is satisfied. Satisfaction is
+recorded only via rtm:SatisfactionAttestation (per ADR-021) — never inferred from
+addresses-edges alone. Following the Hawkins-Habli Assurance Claim Point split.""" ;
+    rdfs:domain rtm:Artifact ;
+    rdfs:range rtm:Requirement .
 
 rtm:approvedBy a owl:ObjectProperty ;
     rdfs:label "approvedBy (named human IRI; SHACL-enforced)" ;
@@ -119,11 +131,6 @@ rtm:fail a rtm:AttestationStatus ;
 
 rtm:pass a rtm:AttestationStatus ;
     rdfs:label "pass" .
-
-rtm:satisfies a owl:ObjectProperty ;
-    rdfs:label "satisfies (artifact → requirement)" ;
-    rdfs:domain rtm:Artifact ;
-    rdfs:range rtm:Requirement .
 
 rtm:status a owl:ObjectProperty ;
     rdfs:label "status (pass | fail | deferred | deprecated)" ;

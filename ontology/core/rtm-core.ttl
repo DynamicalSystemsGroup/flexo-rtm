@@ -26,11 +26,18 @@ rtm:Artifact
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Artifact (verification evidence)" .
 
-rtm:satisfies
+rtm:addresses
     a owl:ObjectProperty ;
     rdfs:domain rtm:Artifact ;
     rdfs:range  rtm:Requirement ;
-    rdfs:label  "satisfies (artifact → requirement)" .
+    rdfs:label  "addresses (artifact → requirement)" ;
+    rdfs:comment """An artifact ADDRESSES a requirement — it provides evidence bearing on
+whether the requirement is met. Addressing is structural and per-edge.
+
+SATISFACTION is a separate, stronger epistemic claim: a named human, synthesizing
+the available evidence, attests that a requirement is satisfied. Satisfaction is
+recorded only via rtm:SatisfactionAttestation (per ADR-021) — never inferred from
+addresses-edges alone. Following the Hawkins-Habli Assurance Claim Point split.""" .
 
 # --- scope (Design Spec §5.3, ADR-007) ---------------------------------------
 
@@ -47,7 +54,7 @@ rtm:Attestation
 rtm:SatisfactionAttestation
     a owl:Class ;
     rdfs:subClassOf rtm:Attestation ;
-    rdfs:label "Satisfaction attestation (over an rtm:satisfies edge)" .
+    rdfs:label "Satisfaction attestation (over an rtm:addresses edge)" .
 
 rtm:AdequacyAttestation
     a owl:Class ;

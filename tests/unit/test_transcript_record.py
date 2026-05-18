@@ -19,7 +19,7 @@ def _input_graph() -> Graph:
         @prefix rtm: <https://flexo-rtm.dev/ontology#> .
         @prefix ex:  <https://rtm.example/> .
         ex:r1 a rtm:Requirement .
-        ex:a1 a rtm:Artifact ; rtm:satisfies ex:r1 .
+        ex:a1 a rtm:Artifact ; rtm:addresses ex:r1 .
         """,
         format="turtle",
     )
