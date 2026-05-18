@@ -27,9 +27,13 @@ The implementation of `flexo-rtm` — a verifiable self-certification oracle for
 
 ## Slice in progress
 
-Slice 1 — engineering substrate + ontology core skeleton. Acceptance: X6 (parsimony ≤ 2000 triples), I1 (approver shape), X5 (minimal install), partial X1 (canonicalization byte-identical).
+Slice 2 — scope materialisation + transcript + audit report shape (X1, X3, X4 + partial F4). Slice 1 landed at commit 9268811. The next slice is selected from the roadmap in the plan file; each slice gets its own `/writing-plans` cycle before coding.
 
-When slice 1 lands, the next slice is selected from the roadmap in the plan file; each slice gets its own `/writing-plans` cycle before coding.
+## Research-repo divergences
+
+Track inconsistencies between this repo and the canonical research repo. Each entry names what diverged, the chosen resolution, and the research-repo file that should be reconciled in its next normal-course revision.
+
+- **`TranscriptStep.step_kind` enum.** [`Design Spec`](/Users/z/Documents/GitHub/flexo-rtm-research/wiki/Design Spec.md) §7.4 lists `"sparql", "shacl", "canonicalize", "fetch", "verify-signature"`; [`Transcript Replay Semantics`](/Users/z/Documents/GitHub/flexo-rtm-research/wiki/Transcript Replay Semantics.md) §2 + §4a lists `"sparql", "shacl", "canonicalize", "kc-operation", "delegated-numerical"` (the latter wired to [`ADR-027`](/Users/z/Documents/GitHub/flexo-rtm-research/wiki/ADR-027 Bit-Exactness vs Numerical Tolerances Are Both First-Class.md)). Resolution chosen 2026-05-18: companion wins; [`oracle/models`](oracle/src/oracle/models/__init__.py) uses the companion's five. Research repo to reconcile: update Design Spec §7.4 to match the companion in its next revision.
 
 ## Style
 

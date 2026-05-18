@@ -18,7 +18,9 @@ AttestationClass = Literal[
     "CompositionCoverageAttestation",
     "CompositionSufficiencyAttestation",
 ]
-TranscriptStepKind = Literal["sparql", "shacl", "canonicalize", "fetch", "verify-signature"]
+TranscriptStepKind = Literal[
+    "sparql", "shacl", "canonicalize", "kc-operation", "delegated-numerical"
+]
 
 
 class Scope(BaseModel):
