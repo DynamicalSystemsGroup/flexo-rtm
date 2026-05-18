@@ -1,0 +1,44 @@
+@prefix adcs: <http://example.org/adcs-demo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rtm: <https://flexo-rtm.dev/ontology#> .
+
+adcs:EV-PROOF-REQ-001 a rtm:Artifact ;
+    rdfs:comment "Translated from prototype role: ProofArtifact" ;
+    rtm:addresses adcs:REQ-001 .
+
+adcs:EV-PROOF-REQ-002 a rtm:Artifact ;
+    rdfs:comment "Translated from prototype role: ProofArtifact" ;
+    rtm:addresses adcs:REQ-002 .
+
+adcs:EV-PROOF-REQ-003 a rtm:Artifact ;
+    rdfs:comment "Translated from prototype role: ProofArtifact" ;
+    rtm:addresses adcs:REQ-003 .
+
+adcs:EV-PROOF-REQ-004 a rtm:Artifact ;
+    rdfs:comment "Translated from prototype role: ProofArtifact" ;
+    rtm:addresses adcs:REQ-004 .
+
+adcs:EV-SIM-REQ-001 a rtm:Artifact ;
+    rdfs:comment "Translated from prototype role: SimulationResult" ;
+    rtm:addresses adcs:REQ-001 .
+
+adcs:EV-SIM-REQ-002 a rtm:Artifact ;
+    rdfs:comment "Translated from prototype role: SimulationResult" ;
+    rtm:addresses adcs:REQ-002 .
+
+adcs:EV-SIM-REQ-004 a rtm:Artifact ;
+    rdfs:comment "Translated from prototype role: SimulationResult" ;
+    rtm:addresses adcs:REQ-004 .
+
+<https://flexo-rtm.dev/examples/adcs-corpus> a owl:Ontology ;
+    rdfs:comment "Translated from DynamicalSystemsGroup/ADCS-lifecycle-demo via scripts/translate_adcs_corpus.py. See source/PROVENANCE.md." .
+
+adcs:REQ-003 a rtm:Requirement .
+
+adcs:REQ-001 a rtm:Requirement .
+
+adcs:REQ-002 a rtm:Requirement .
+
+adcs:REQ-004 a rtm:Requirement .
+
