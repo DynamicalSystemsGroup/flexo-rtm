@@ -1,0 +1,165 @@
+@prefix earl: <http://www.w3.org/ns/earl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rtm: <https://flexo-rtm.dev/ontology#> .
+
+earl:assertedBy a owl:ObjectProperty ;
+    rdfs:domain earl:Assertion .
+
+earl:cantTell a earl:TestResult ;
+    rdfs:label "cantTell" .
+
+earl:failed a earl:TestResult ;
+    rdfs:label "failed" .
+
+earl:inapplicable a earl:TestResult ;
+    rdfs:label "inapplicable" .
+
+earl:passed a earl:TestResult ;
+    rdfs:label "passed" .
+
+earl:result a owl:ObjectProperty ;
+    rdfs:domain earl:Assertion ;
+    rdfs:range earl:TestResult .
+
+earl:subject a owl:ObjectProperty ;
+    rdfs:domain earl:Assertion .
+
+earl:test a owl:ObjectProperty ;
+    rdfs:domain earl:Assertion ;
+    rdfs:range earl:TestCriterion .
+
+earl:untested a earl:TestResult ;
+    rdfs:label "untested" .
+
+prov:Organization a owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:subClassOf prov:Agent .
+
+prov:Person a owl:Class ;
+    rdfs:label "Person" ;
+    rdfs:subClassOf prov:Agent .
+
+prov:atLocation a owl:ObjectProperty .
+
+prov:atTime a owl:DatatypeProperty .
+
+prov:endedAtTime a owl:DatatypeProperty .
+
+prov:hadPlan a owl:ObjectProperty ;
+    rdfs:domain prov:Activity ;
+    rdfs:range prov:Plan .
+
+prov:specializationOf a owl:ObjectProperty ;
+    rdfs:domain prov:Entity ;
+    rdfs:range prov:Entity .
+
+prov:startedAtTime a owl:DatatypeProperty .
+
+prov:used a owl:ObjectProperty ;
+    rdfs:domain prov:Activity ;
+    rdfs:range prov:Entity .
+
+prov:wasAssociatedWith a owl:ObjectProperty ;
+    rdfs:domain prov:Activity ;
+    rdfs:range prov:Agent .
+
+prov:wasAttributedTo a owl:ObjectProperty ;
+    rdfs:domain prov:Entity ;
+    rdfs:range prov:Agent .
+
+prov:wasDerivedFrom a owl:ObjectProperty ;
+    rdfs:domain prov:Entity ;
+    rdfs:range prov:Entity .
+
+prov:wasGeneratedBy a owl:ObjectProperty ;
+    rdfs:domain prov:Entity ;
+    rdfs:range prov:Activity .
+
+prov:wasInformedBy a owl:ObjectProperty ;
+    rdfs:domain prov:Activity ;
+    rdfs:range prov:Activity .
+
+prov:wasInvalidatedBy a owl:ObjectProperty ;
+    rdfs:domain prov:Entity ;
+    rdfs:range prov:Activity .
+
+<https://flexo-rtm.dev/ontology> a owl:Ontology ;
+    rdfs:label "flexo-rtm core ontology (slice 1 skeleton)" ;
+    owl:versionInfo "0.0.1" .
+
+rtm:AdequacyAttestation a owl:Class ;
+    rdfs:label "Adequacy attestation (over an artifact/requirement pair)" ;
+    rdfs:subClassOf rtm:Attestation .
+
+rtm:SatisfactionAttestation a owl:Class ;
+    rdfs:label "Satisfaction attestation (over an rtm:satisfies edge)" ;
+    rdfs:subClassOf rtm:Attestation .
+
+rtm:Scope a owl:Class ;
+    rdfs:label "Scope (named graph functioning as an ASOT)" .
+
+rtm:SufficiencyAttestation a owl:Class ;
+    rdfs:label "Sufficiency attestation (over an artifact/requirement pair)" ;
+    rdfs:subClassOf rtm:Attestation .
+
+rtm:approvedBy a owl:ObjectProperty ;
+    rdfs:label "approvedBy (named human IRI; SHACL-enforced)" ;
+    rdfs:domain rtm:Attestation .
+
+rtm:deferred a rtm:AttestationStatus ;
+    rdfs:label "deferred" .
+
+rtm:deprecated a rtm:AttestationStatus ;
+    rdfs:label "deprecated" .
+
+rtm:fail a rtm:AttestationStatus ;
+    rdfs:label "fail" .
+
+rtm:pass a rtm:AttestationStatus ;
+    rdfs:label "pass" .
+
+rtm:satisfies a owl:ObjectProperty ;
+    rdfs:label "satisfies (artifact → requirement)" ;
+    rdfs:domain rtm:Artifact ;
+    rdfs:range rtm:Requirement .
+
+rtm:status a owl:ObjectProperty ;
+    rdfs:label "status (pass | fail | deferred | deprecated)" ;
+    rdfs:domain rtm:Attestation .
+
+earl:TestCriterion a owl:Class ;
+    rdfs:label "TestCriterion" .
+
+prov:Plan a owl:Class ;
+    rdfs:label "Plan" .
+
+rtm:Artifact a owl:Class ;
+    rdfs:label "Artifact (verification evidence)" ;
+    rdfs:subClassOf prov:Entity .
+
+rtm:Requirement a owl:Class ;
+    rdfs:label "Requirement" .
+
+earl:Assertion a owl:Class ;
+    rdfs:label "Assertion" .
+
+prov:Agent a owl:Class ;
+    rdfs:label "Agent" .
+
+rtm:AttestationStatus a owl:Class ;
+    rdfs:label "AttestationStatus (one of: pass, fail, deferred, deprecated)" .
+
+rtm:Attestation a owl:Class ;
+    rdfs:label "Attestation (named-approver assertion)" .
+
+earl:TestResult a owl:Class ;
+    rdfs:label "TestResult" .
+
+prov:Activity a owl:Class ;
+    rdfs:label "Activity" .
+
+prov:Entity a owl:Class ;
+    rdfs:label "Entity" .
+

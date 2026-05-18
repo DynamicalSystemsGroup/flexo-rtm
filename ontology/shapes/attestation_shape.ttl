@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# Always-active SHACL: every rtm:Attestation requires rtm:approvedBy <IRI>.
+# Verbatim from Design Spec §4.2; gates acceptance criterion I1 (and T7 in the
+# gap taxonomy: rejection at write time means T7 is structurally absent).
+
+@prefix rtm: <https://flexo-rtm.dev/ontology#> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+
+rtm:AttestationShape
+    a sh:NodeShape ;
+    sh:targetClass rtm:Attestation ;
+    sh:property [
+        sh:path rtm:approvedBy ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Every attestation requires a named human approver IRI"
+    ] .

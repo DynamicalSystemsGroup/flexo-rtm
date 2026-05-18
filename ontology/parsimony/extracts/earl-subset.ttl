@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# EARL subset (hand-curated for slice 1). Terms enumerated in manifest.yaml.
+
+@prefix earl: <http://www.w3.org/ns/earl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+earl:Assertion     a owl:Class ; rdfs:label "Assertion" .
+earl:TestResult    a owl:Class ; rdfs:label "TestResult" .
+earl:TestCriterion a owl:Class ; rdfs:label "TestCriterion" .
+
+earl:result     a owl:ObjectProperty ; rdfs:domain earl:Assertion ; rdfs:range earl:TestResult .
+earl:subject    a owl:ObjectProperty ; rdfs:domain earl:Assertion .
+earl:test       a owl:ObjectProperty ; rdfs:domain earl:Assertion ; rdfs:range earl:TestCriterion .
+earl:assertedBy a owl:ObjectProperty ; rdfs:domain earl:Assertion .
+
+earl:passed       a earl:TestResult ; rdfs:label "passed" .
+earl:failed       a earl:TestResult ; rdfs:label "failed" .
+earl:cantTell     a earl:TestResult ; rdfs:label "cantTell" .
+earl:inapplicable a earl:TestResult ; rdfs:label "inapplicable" .
+earl:untested     a earl:TestResult ; rdfs:label "untested" .

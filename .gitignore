@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+*.so
+
+# uv / virtualenv
+.venv/
+.python-version
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Build outputs that ARE NOT git-tracked
+# (note: ontology/rtm.ttl IS tracked — it is the deterministic build product
+#  per Parsimony Manifest §5; do not ignore it.)

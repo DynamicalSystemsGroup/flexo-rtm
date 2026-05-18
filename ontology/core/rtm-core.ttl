@@ -1,0 +1,83 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# rtm: core vocabulary — slice 1 skeleton. Design Spec §4.1 + §4.2.
+# Per ADR-021, v0.1 ships three per-claim attestation subclasses (composition
+# subclasses come in slice 10). Status individuals per ADR-031.
+
+@prefix rtm:  <https://flexo-rtm.dev/ontology#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+<https://flexo-rtm.dev/ontology>
+    a owl:Ontology ;
+    rdfs:label "flexo-rtm core ontology (slice 1 skeleton)" ;
+    owl:versionInfo "0.0.1" .
+
+# --- traceability primitives (Design Spec §4.1) -------------------------------
+
+rtm:Requirement
+    a owl:Class ;
+    rdfs:label "Requirement" .
+
+rtm:Artifact
+    a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Artifact (verification evidence)" .
+
+rtm:satisfies
+    a owl:ObjectProperty ;
+    rdfs:domain rtm:Artifact ;
+    rdfs:range  rtm:Requirement ;
+    rdfs:label  "satisfies (artifact → requirement)" .
+
+# --- scope (Design Spec §5.3, ADR-007) ---------------------------------------
+
+rtm:Scope
+    a owl:Class ;
+    rdfs:label "Scope (named graph functioning as an ASOT)" .
+
+# --- attestation hierarchy (Design Spec §4.2, ADR-021) -----------------------
+
+rtm:Attestation
+    a owl:Class ;
+    rdfs:label "Attestation (named-approver assertion)" .
+
+rtm:SatisfactionAttestation
+    a owl:Class ;
+    rdfs:subClassOf rtm:Attestation ;
+    rdfs:label "Satisfaction attestation (over an rtm:satisfies edge)" .
+
+rtm:AdequacyAttestation
+    a owl:Class ;
+    rdfs:subClassOf rtm:Attestation ;
+    rdfs:label "Adequacy attestation (over an artifact/requirement pair)" .
+
+rtm:SufficiencyAttestation
+    a owl:Class ;
+    rdfs:subClassOf rtm:Attestation ;
+    rdfs:label "Sufficiency attestation (over an artifact/requirement pair)" .
+
+# --- attestation properties --------------------------------------------------
+
+rtm:approvedBy
+    a owl:ObjectProperty ;
+    rdfs:domain rtm:Attestation ;
+    rdfs:label  "approvedBy (named human IRI; SHACL-enforced)" .
+
+rtm:status
+    a owl:ObjectProperty ;
+    rdfs:domain rtm:Attestation ;
+    rdfs:label  "status (pass | fail | deferred | deprecated)" .
+
+# --- attestation status individuals (ADR-031) --------------------------------
+
+rtm:pass       a rtm:AttestationStatus ; rdfs:label "pass" .
+rtm:fail       a rtm:AttestationStatus ; rdfs:label "fail" .
+rtm:deferred   a rtm:AttestationStatus ; rdfs:label "deferred" .
+rtm:deprecated a rtm:AttestationStatus ; rdfs:label "deprecated" .
+
+rtm:AttestationStatus
+    a owl:Class ;
+    rdfs:label "AttestationStatus (one of: pass, fail, deferred, deprecated)" .

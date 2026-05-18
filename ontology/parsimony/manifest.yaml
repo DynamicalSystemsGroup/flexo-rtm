@@ -1,0 +1,69 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# Declarative source of truth for which external-vocab terms ship inside
+# flexo-rtm's assembled rtm.ttl. Per Parsimony Manifest §2.
+#
+# Slice 1 wires PROV-O and EARL extracts through the build; the other seven
+# vocabularies are declared (so the manifest schema is exercised) with empty
+# extracted_* lists so the build skips them. Subsequent slices fill them in.
+
+version: "1.0"
+target_triple_budget: 2000
+
+vocabularies:
+  - name: PROV-O
+    iri: "http://www.w3.org/ns/prov#"
+    source_file: ontology/imports/prov-o.ttl
+    extract_method: hand-curated  # MIREOT in slice 2+ once prov-o.ttl is vendored
+    target_extract_file: parsimony/extracts/prov-subset.ttl
+    extracted_classes:
+      - { iri: "prov:Activity",     purpose: "superclass of rtm:Activity" }
+      - { iri: "prov:Entity",       purpose: "superclass of rtm:Artifact" }
+      - { iri: "prov:Agent",        purpose: "superclass of foaf:Person / org:Organization" }
+      - { iri: "prov:Person",       purpose: "agent specialization" }
+      - { iri: "prov:Organization", purpose: "agent specialization" }
+      - { iri: "prov:Plan",         purpose: "declared activity blueprint" }
+    extracted_properties:
+      - { iri: "prov:wasGeneratedBy",    purpose: "artifact ← activity that produced it" }
+      - { iri: "prov:used",              purpose: "activity → artifact it consumed" }
+      - { iri: "prov:wasDerivedFrom",    purpose: "artifact lineage" }
+      - { iri: "prov:wasAssociatedWith", purpose: "activity → agent" }
+      - { iri: "prov:wasAttributedTo",   purpose: "entity → agent" }
+      - { iri: "prov:startedAtTime",     purpose: "activity start time" }
+      - { iri: "prov:endedAtTime",       purpose: "activity end time" }
+      - { iri: "prov:atTime",            purpose: "instantaneous events (attestation moment)" }
+      - { iri: "prov:atLocation",        purpose: "where an activity ran" }
+      - { iri: "prov:hadPlan",           purpose: "activity → its blueprint" }
+      - { iri: "prov:wasInformedBy",     purpose: "activity → activity (chain)" }
+      - { iri: "prov:wasInvalidatedBy",  purpose: "deprecated attestations (ADR-031)" }
+      - { iri: "prov:specializationOf",  purpose: "entity specialization" }
+
+  - name: EARL
+    iri: "http://www.w3.org/ns/earl#"
+    source_file: ontology/imports/earl.ttl
+    extract_method: hand-curated
+    target_extract_file: parsimony/extracts/earl-subset.ttl
+    extracted_classes:
+      - { iri: "earl:Assertion",     purpose: "ancestral pattern for rtm:Attestation (informational)" }
+      - { iri: "earl:TestResult",    purpose: "pattern for evaluation outcomes" }
+      - { iri: "earl:TestCriterion", purpose: "pattern for test definitions" }
+    extracted_properties:
+      - { iri: "earl:result",     purpose: "rtm:Attestation alignment" }
+      - { iri: "earl:subject",    purpose: "what is being attested about" }
+      - { iri: "earl:test",       purpose: "which test produced the result" }
+      - { iri: "earl:assertedBy", purpose: "who asserted (parallel to rtm:approvedBy)" }
+    extracted_individuals:
+      - { iri: "earl:passed",       purpose: "aligned with rtm:pass" }
+      - { iri: "earl:failed",       purpose: "aligned with rtm:fail" }
+      - { iri: "earl:cantTell",     purpose: "aligned with rtm:deferred" }
+      - { iri: "earl:inapplicable", purpose: "edge-case outcome (OSLC-QM compat)" }
+      - { iri: "earl:untested",     purpose: "edge-case outcome" }
+
+  # Declared, slice-1-empty: the build skips these until their extracts ship.
+  - { name: OntoGSN,      iri: "https://w3id.org/ontogsn/",                                       source_file: ontology/imports/ontogsn.ttl,         extract_method: SLME,             extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
+  - { name: Org Ontology, iri: "http://www.w3.org/ns/org#",                                       source_file: ontology/imports/org.ttl,             extract_method: MIREOT,           extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
+  - { name: FOAF,         iri: "http://xmlns.com/foaf/0.1/",                                      source_file: ontology/imports/foaf.rdf,            extract_method: MIREOT,           extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
+  - { name: DCAT,         iri: "http://www.w3.org/ns/dcat#",                                      source_file: ontology/imports/dcat.ttl,            extract_method: MIREOT,           extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
+  - { name: OSLC-RM,      iri: "http://open-services.net/ns/rm#",                                 source_file: ontology/imports/oslc-rm.ttl,         extract_method: SPARQL_CONSTRUCT, extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
+  - { name: OSLC-QM,      iri: "http://open-services.net/ns/qm#",                                 source_file: ontology/imports/oslc-qm.ttl,         extract_method: SPARQL_CONSTRUCT, extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
+  - { name: omg-sysml,    iri: "https://www.omg.org/spec/SysML/20240801/SysML#",                  source_file: ontology/imports/omg-sysml-v1.ttl,    extract_method: SLME,             extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
