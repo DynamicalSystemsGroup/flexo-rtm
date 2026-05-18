@@ -88,3 +88,60 @@ rtm:deprecated a rtm:AttestationStatus ; rdfs:label "deprecated" .
 rtm:AttestationStatus
     a owl:Class ;
     rdfs:label "AttestationStatus (one of: pass, fail, deferred, deprecated)" .
+
+# --- attestation subject + aspect (Design Spec §4.2) ------------------------
+
+rtm:appliesTo
+    a owl:ObjectProperty ;
+    rdfs:domain rtm:Attestation ;
+    rdfs:label  "appliesTo (attestation → subject IRI; requirement for SatisfactionAttestation)" .
+
+rtm:Aspect
+    a owl:Class ;
+    rdfs:label "Aspect (an axis a requirement is judged along: functional, safety, performance, ...)" .
+
+rtm:hasAspect a owl:ObjectProperty ; rdfs:range rtm:Aspect ; rdfs:label "hasAspect" .
+rtm:inScope   a owl:ObjectProperty ; rdfs:range rtm:Scope  ; rdfs:label "inScope" .
+
+# --- identity projection vocabulary (Identity Adapter Contract §3-§4) -------
+
+rtm:hasExternalIdentity
+    a owl:DatatypeProperty ;
+    rdfs:label "hasExternalIdentity (provider-prefixed identity string)" .
+
+rtm:Attribute
+    a owl:Class ;
+    rdfs:label "Attribute (key/value typed by the adapter)" .
+
+rtm:hasAttribute   a owl:ObjectProperty   ; rdfs:range rtm:Attribute ; rdfs:label "hasAttribute" .
+rtm:attributeKey   a owl:DatatypeProperty ; rdfs:label "attributeKey" .
+rtm:attributeValue a owl:DatatypeProperty ; rdfs:label "attributeValue" .
+rtm:scopedTo       a owl:ObjectProperty   ; rdfs:range rtm:Scope ; rdfs:label "scopedTo" .
+
+rtm:hasQualifiedRole
+    a owl:ObjectProperty ;
+    rdfs:label "hasQualifiedRole (org → role; ADR-028 federated audit)" .
+
+# --- policy projection (Identity Adapter Contract §3.4 + §5) ----------------
+
+rtm:Policy
+    a owl:Class ;
+    rdfs:label "Policy (RBAC + ABAC + scope-based authorization, SPARQL-evaluable)" .
+
+rtm:appliesToRole          a owl:ObjectProperty ; rdfs:domain rtm:Policy ; rdfs:label "appliesToRole" .
+rtm:requiresAttribute      a owl:ObjectProperty ; rdfs:domain rtm:Policy ; rdfs:label "requiresAttribute" .
+rtm:attributeMinValue      a owl:DatatypeProperty ; rdfs:label "attributeMinValue" .
+rtm:permitsAttestationType a owl:ObjectProperty ; rdfs:domain rtm:Policy ; rdfs:label "permitsAttestationType" .
+rtm:permitsAspect          a owl:ObjectProperty ; rdfs:domain rtm:Policy ; rdfs:range rtm:Aspect ; rdfs:label "permitsAspect" .
+rtm:withinScope            a owl:ObjectProperty ; rdfs:domain rtm:Policy ; rdfs:range rtm:Scope ; rdfs:label "withinScope" .
+
+# --- scope composition (Analysis Layer Scope Algebra) -----------------------
+# Properties used by oracle/analysis/scope.py; declared here so they're in
+# manifest. Range constraints kept loose to allow the algebra to evolve.
+
+rtm:includesGraph     a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:label "includesGraph" .
+rtm:scopeFilter       a owl:DatatypeProperty ; rdfs:domain rtm:Scope ; rdfs:label "scopeFilter (SPARQL FILTER fragment)" .
+rtm:extends           a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:range rtm:Scope ; rdfs:label "extends" .
+rtm:intersectsWith    a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:range rtm:Scope ; rdfs:label "intersectsWith" .
+rtm:union             a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:range rtm:Scope ; rdfs:label "union (disjunctive composition; rare)" .
+rtm:asotHeldBy        a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:label "asotHeldBy (org IRI; ADR-030)" .

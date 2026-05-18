@@ -1,4 +1,6 @@
 @prefix earl: <http://www.w3.org/ns/earl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix org: <http://www.w3.org/ns/org#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -32,6 +34,26 @@ earl:test a owl:ObjectProperty ;
 
 earl:untested a earl:TestResult ;
     rdfs:label "untested" .
+
+org:OrganizationalUnit a owl:Class ;
+    rdfs:label "OrganizationalUnit" ;
+    rdfs:subClassOf org:Organization .
+
+org:hasMembership a owl:ObjectProperty ;
+    rdfs:label "hasMembership" .
+
+org:memberOf a owl:ObjectProperty ;
+    rdfs:label "memberOf (convenience inverse)" .
+
+org:organization a owl:ObjectProperty ;
+    rdfs:label "organization" ;
+    rdfs:domain org:Membership ;
+    rdfs:range org:Organization .
+
+org:role a owl:ObjectProperty ;
+    rdfs:label "role" ;
+    rdfs:domain org:Membership ;
+    rdfs:range org:Role .
 
 prov:Organization a owl:Class ;
     rdfs:label "Organization" ;
@@ -85,6 +107,16 @@ prov:wasInvalidatedBy a owl:ObjectProperty ;
     rdfs:domain prov:Entity ;
     rdfs:range prov:Activity .
 
+foaf:Person a owl:Class ;
+    rdfs:label "Person" ;
+    rdfs:subClassOf foaf:Agent .
+
+foaf:mbox a owl:ObjectProperty ;
+    rdfs:label "mbox" .
+
+foaf:name a owl:DatatypeProperty ;
+    rdfs:label "name" .
+
 <https://flexo-rtm.dev/ontology> a owl:Ontology ;
     rdfs:label "flexo-rtm core ontology (slice 1 skeleton)" ;
     owl:versionInfo "0.0.1" .
@@ -96,9 +128,6 @@ rtm:AdequacyAttestation a owl:Class ;
 rtm:SatisfactionAttestation a owl:Class ;
     rdfs:label "Satisfaction attestation (over an rtm:addresses edge)" ;
     rdfs:subClassOf rtm:Attestation .
-
-rtm:Scope a owl:Class ;
-    rdfs:label "Scope (named graph functioning as an ASOT)" .
 
 rtm:SufficiencyAttestation a owl:Class ;
     rdfs:label "Sufficiency attestation (over an artifact/requirement pair)" ;
@@ -116,9 +145,30 @@ addresses-edges alone. Following the Hawkins-Habli Assurance Claim Point split."
     rdfs:domain rtm:Artifact ;
     rdfs:range rtm:Requirement .
 
+rtm:appliesTo a owl:ObjectProperty ;
+    rdfs:label "appliesTo (attestation → subject IRI; requirement for SatisfactionAttestation)" ;
+    rdfs:domain rtm:Attestation .
+
+rtm:appliesToRole a owl:ObjectProperty ;
+    rdfs:label "appliesToRole" ;
+    rdfs:domain rtm:Policy .
+
 rtm:approvedBy a owl:ObjectProperty ;
     rdfs:label "approvedBy (named human IRI; SHACL-enforced)" ;
     rdfs:domain rtm:Attestation .
+
+rtm:asotHeldBy a owl:ObjectProperty ;
+    rdfs:label "asotHeldBy (org IRI; ADR-030)" ;
+    rdfs:domain rtm:Scope .
+
+rtm:attributeKey a owl:DatatypeProperty ;
+    rdfs:label "attributeKey" .
+
+rtm:attributeMinValue a owl:DatatypeProperty ;
+    rdfs:label "attributeMinValue" .
+
+rtm:attributeValue a owl:DatatypeProperty ;
+    rdfs:label "attributeValue" .
 
 rtm:deferred a rtm:AttestationStatus ;
     rdfs:label "deferred" .
@@ -126,28 +176,109 @@ rtm:deferred a rtm:AttestationStatus ;
 rtm:deprecated a rtm:AttestationStatus ;
     rdfs:label "deprecated" .
 
+rtm:extends a owl:ObjectProperty ;
+    rdfs:label "extends" ;
+    rdfs:domain rtm:Scope ;
+    rdfs:range rtm:Scope .
+
 rtm:fail a rtm:AttestationStatus ;
     rdfs:label "fail" .
 
+rtm:hasAspect a owl:ObjectProperty ;
+    rdfs:label "hasAspect" ;
+    rdfs:range rtm:Aspect .
+
+rtm:hasAttribute a owl:ObjectProperty ;
+    rdfs:label "hasAttribute" ;
+    rdfs:range rtm:Attribute .
+
+rtm:hasExternalIdentity a owl:DatatypeProperty ;
+    rdfs:label "hasExternalIdentity (provider-prefixed identity string)" .
+
+rtm:hasQualifiedRole a owl:ObjectProperty ;
+    rdfs:label "hasQualifiedRole (org → role; ADR-028 federated audit)" .
+
+rtm:inScope a owl:ObjectProperty ;
+    rdfs:label "inScope" ;
+    rdfs:range rtm:Scope .
+
+rtm:includesGraph a owl:ObjectProperty ;
+    rdfs:label "includesGraph" ;
+    rdfs:domain rtm:Scope .
+
+rtm:intersectsWith a owl:ObjectProperty ;
+    rdfs:label "intersectsWith" ;
+    rdfs:domain rtm:Scope ;
+    rdfs:range rtm:Scope .
+
 rtm:pass a rtm:AttestationStatus ;
     rdfs:label "pass" .
+
+rtm:permitsAspect a owl:ObjectProperty ;
+    rdfs:label "permitsAspect" ;
+    rdfs:domain rtm:Policy ;
+    rdfs:range rtm:Aspect .
+
+rtm:permitsAttestationType a owl:ObjectProperty ;
+    rdfs:label "permitsAttestationType" ;
+    rdfs:domain rtm:Policy .
+
+rtm:requiresAttribute a owl:ObjectProperty ;
+    rdfs:label "requiresAttribute" ;
+    rdfs:domain rtm:Policy .
+
+rtm:scopeFilter a owl:DatatypeProperty ;
+    rdfs:label "scopeFilter (SPARQL FILTER fragment)" ;
+    rdfs:domain rtm:Scope .
+
+rtm:scopedTo a owl:ObjectProperty ;
+    rdfs:label "scopedTo" ;
+    rdfs:range rtm:Scope .
 
 rtm:status a owl:ObjectProperty ;
     rdfs:label "status (pass | fail | deferred | deprecated)" ;
     rdfs:domain rtm:Attestation .
 
+rtm:union a owl:ObjectProperty ;
+    rdfs:label "union (disjunctive composition; rare)" ;
+    rdfs:domain rtm:Scope ;
+    rdfs:range rtm:Scope .
+
+rtm:withinScope a owl:ObjectProperty ;
+    rdfs:label "withinScope" ;
+    rdfs:domain rtm:Policy ;
+    rdfs:range rtm:Scope .
+
 earl:TestCriterion a owl:Class ;
     rdfs:label "TestCriterion" .
 
+org:Role a owl:Class ;
+    rdfs:label "Role" .
+
 prov:Plan a owl:Class ;
     rdfs:label "Plan" .
+
+foaf:Agent a owl:Class ;
+    rdfs:label "Agent" .
 
 rtm:Artifact a owl:Class ;
     rdfs:label "Artifact (verification evidence)" ;
     rdfs:subClassOf prov:Entity .
 
+rtm:Attribute a owl:Class ;
+    rdfs:label "Attribute (key/value typed by the adapter)" .
+
 rtm:Requirement a owl:Class ;
     rdfs:label "Requirement" .
+
+org:Membership a owl:Class ;
+    rdfs:label "Membership" .
+
+org:Organization a owl:Class ;
+    rdfs:label "Organization" .
+
+rtm:Aspect a owl:Class ;
+    rdfs:label "Aspect (an axis a requirement is judged along: functional, safety, performance, ...)" .
 
 earl:Assertion a owl:Class ;
     rdfs:label "Assertion" .
@@ -158,15 +289,21 @@ prov:Agent a owl:Class ;
 rtm:AttestationStatus a owl:Class ;
     rdfs:label "AttestationStatus (one of: pass, fail, deferred, deprecated)" .
 
-rtm:Attestation a owl:Class ;
-    rdfs:label "Attestation (named-approver assertion)" .
+rtm:Policy a owl:Class ;
+    rdfs:label "Policy (RBAC + ABAC + scope-based authorization, SPARQL-evaluable)" .
 
 earl:TestResult a owl:Class ;
     rdfs:label "TestResult" .
+
+rtm:Attestation a owl:Class ;
+    rdfs:label "Attestation (named-approver assertion)" .
 
 prov:Activity a owl:Class ;
     rdfs:label "Activity" .
 
 prov:Entity a owl:Class ;
     rdfs:label "Entity" .
+
+rtm:Scope a owl:Class ;
+    rdfs:label "Scope (named graph functioning as an ASOT)" .
 

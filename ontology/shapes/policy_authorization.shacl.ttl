@@ -1,0 +1,63 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# Policy authorization SHACL — Identity Adapter Contract §5.
+# When an attestation is written, this constraint queries the identity
+# projection + policies via SPARQL and reports a violation if no policy
+# authorizes the approver for that (attestation_type, aspect, scope) triple.
+#
+# The shape reports a violation on each attestation that is NOT authorized.
+
+@prefix rtm: <https://flexo-rtm.dev/ontology#> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+
+rtm:AttestationAuthorizationShape
+    a sh:NodeShape ;
+    sh:targetClass rtm:Attestation ;
+    sh:sparql [
+        sh:message "Approver not authorized for this attestation under any policy in scope" ;
+        sh:prefixes [
+            sh:declare [ sh:prefix "rtm" ; sh:namespace "https://flexo-rtm.dev/ontology#"^^<http://www.w3.org/2001/XMLSchema#anyURI> ] ,
+                       [ sh:prefix "org" ; sh:namespace "http://www.w3.org/ns/org#"^^<http://www.w3.org/2001/XMLSchema#anyURI> ]
+        ] ;
+        sh:select """
+            SELECT $this WHERE {
+                $this rtm:approvedBy ?approver ;
+                      rtm:appliesTo  ?subject .
+                ?subject rtm:hasAspect ?aspect ;
+                         rtm:inScope   ?scope .
+
+                FILTER NOT EXISTS {
+                    ?policy a rtm:Policy ;
+                            rtm:permitsAttestationType ?permittedType ;
+                            rtm:permitsAspect          ?aspect ;
+                            rtm:withinScope            ?policyScope ;
+                            rtm:appliesToRole          ?role .
+
+                    # The attestation has the policy-permitted type.
+                    $this a ?permittedType .
+
+                    ?approver org:hasMembership ?membership .
+                    ?membership org:role ?role .
+
+                    # Scope match: policy scope is the subject scope OR
+                    # the subject scope rtm:extends* up to the policy scope.
+                    FILTER (
+                        ?scope = ?policyScope
+                        || EXISTS { ?scope rtm:extends+ ?policyScope }
+                    )
+
+                    # All attribute requirements on the policy are met.
+                    FILTER NOT EXISTS {
+                        ?policy rtm:requiresAttribute ?req .
+                        ?req rtm:attributeKey ?reqKey ;
+                             rtm:attributeValue ?reqValue .
+                        FILTER NOT EXISTS {
+                            ?membership rtm:hasAttribute ?attr .
+                            ?attr rtm:attributeKey ?reqKey ;
+                                  rtm:attributeValue ?reqValue .
+                        }
+                    }
+                }
+            }
+        """
+    ] .

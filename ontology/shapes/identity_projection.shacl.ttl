@@ -1,0 +1,64 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# Identity projection SHACL — Identity Adapter Contract §4.
+# Every adapter's output must conform to these shapes. The shapes target
+# foaf:Person, org:Membership, rtm:Attribute, and rtm:Policy node kinds.
+
+@prefix rtm:  <https://flexo-rtm.dev/ontology#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix org:  <http://www.w3.org/ns/org#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+rtm:PersonProjectionShape a sh:NodeShape ;
+    sh:targetClass foaf:Person ;
+    sh:property [
+        sh:path rtm:hasExternalIdentity ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Every projected Person requires at least one rtm:hasExternalIdentity string"
+    ] .
+
+rtm:MembershipProjectionShape a sh:NodeShape ;
+    sh:targetClass org:Membership ;
+    sh:property [
+        sh:path org:role ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Every Membership requires an org:role IRI"
+    ] ;
+    sh:property [
+        sh:path org:organization ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Every Membership requires an org:organization IRI"
+    ] .
+
+rtm:AttributeProjectionShape a sh:NodeShape ;
+    sh:targetClass rtm:Attribute ;
+    sh:property [
+        sh:path rtm:attributeKey ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Attribute requires rtm:attributeKey (xsd:string)"
+    ] ;
+    sh:property [
+        sh:path rtm:attributeValue ;
+        sh:minCount 1 ;
+        sh:message "Attribute requires rtm:attributeValue"
+    ] .
+
+rtm:PolicyProjectionShape a sh:NodeShape ;
+    sh:targetClass rtm:Policy ;
+    sh:property [
+        sh:path rtm:permitsAttestationType ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Policy requires rtm:permitsAttestationType IRI"
+    ] ;
+    sh:property [
+        sh:path rtm:withinScope ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Policy requires rtm:withinScope IRI"
+    ] .

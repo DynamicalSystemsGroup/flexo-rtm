@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# FOAF subset (hand-curated for slice 4). Terms enumerated in manifest.yaml.
+# Used by the identity projection (Identity Adapter Contract §3.1).
+
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+foaf:Agent  a owl:Class ; rdfs:label "Agent" .
+foaf:Person a owl:Class ; rdfs:subClassOf foaf:Agent ; rdfs:label "Person" .
+
+foaf:name a owl:DatatypeProperty ; rdfs:label "name" .
+foaf:mbox a owl:ObjectProperty   ; rdfs:label "mbox" .

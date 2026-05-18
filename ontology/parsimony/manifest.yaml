@@ -61,8 +61,33 @@ vocabularies:
 
   # Declared, slice-1-empty: the build skips these until their extracts ship.
   - { name: OntoGSN,      iri: "https://w3id.org/ontogsn/",                                       source_file: ontology/imports/ontogsn.ttl,         extract_method: SLME,             extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
-  - { name: Org Ontology, iri: "http://www.w3.org/ns/org#",                                       source_file: ontology/imports/org.ttl,             extract_method: MIREOT,           extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
-  - { name: FOAF,         iri: "http://xmlns.com/foaf/0.1/",                                      source_file: ontology/imports/foaf.rdf,            extract_method: MIREOT,           extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
+  - name: Org Ontology
+    iri: "http://www.w3.org/ns/org#"
+    source_file: ontology/imports/org.ttl
+    extract_method: hand-curated
+    target_extract_file: parsimony/extracts/org-subset.ttl
+    extracted_classes:
+      - { iri: "org:Organization",       purpose: "organizations in identity projection" }
+      - { iri: "org:Membership",         purpose: "person ↔ org with role" }
+      - { iri: "org:Role",               purpose: "roles in RBAC policies" }
+      - { iri: "org:OrganizationalUnit", purpose: "hierarchical org structure" }
+    extracted_properties:
+      - { iri: "org:hasMembership", purpose: "person → membership" }
+      - { iri: "org:organization", purpose: "membership → org" }
+      - { iri: "org:role",         purpose: "membership → role" }
+      - { iri: "org:memberOf",     purpose: "convenience inverse" }
+
+  - name: FOAF
+    iri: "http://xmlns.com/foaf/0.1/"
+    source_file: ontology/imports/foaf.rdf
+    extract_method: hand-curated
+    target_extract_file: parsimony/extracts/foaf-subset.ttl
+    extracted_classes:
+      - { iri: "foaf:Person", purpose: "human identity in projection" }
+      - { iri: "foaf:Agent",  purpose: "superclass of Person + Organization" }
+    extracted_properties:
+      - { iri: "foaf:name", purpose: "human-readable name" }
+      - { iri: "foaf:mbox", purpose: "email contact" }
   - { name: DCAT,         iri: "http://www.w3.org/ns/dcat#",                                      source_file: ontology/imports/dcat.ttl,            extract_method: MIREOT,           extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
   - { name: OSLC-RM,      iri: "http://open-services.net/ns/rm#",                                 source_file: ontology/imports/oslc-rm.ttl,         extract_method: SPARQL_CONSTRUCT, extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
   - { name: OSLC-QM,      iri: "http://open-services.net/ns/qm#",                                 source_file: ontology/imports/oslc-qm.ttl,         extract_method: SPARQL_CONSTRUCT, extracted_classes: [], extracted_properties: [], extracted_individuals: [] }

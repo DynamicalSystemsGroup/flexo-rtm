@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# W3C Org Ontology subset (hand-curated for slice 4). Terms enumerated in
+# manifest.yaml. Used by the identity projection (Identity Adapter Contract §3.1
+# and §3.3) for memberships and organizations.
+
+@prefix org:  <http://www.w3.org/ns/org#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+org:Organization a owl:Class ; rdfs:label "Organization" .
+org:Membership   a owl:Class ; rdfs:label "Membership" .
+org:Role         a owl:Class ; rdfs:label "Role" .
+org:OrganizationalUnit a owl:Class ; rdfs:subClassOf org:Organization ; rdfs:label "OrganizationalUnit" .
+
+org:hasMembership a owl:ObjectProperty ; rdfs:label "hasMembership" .
+org:organization  a owl:ObjectProperty ; rdfs:domain org:Membership ; rdfs:range org:Organization ; rdfs:label "organization" .
+org:role          a owl:ObjectProperty ; rdfs:domain org:Membership ; rdfs:range org:Role ; rdfs:label "role" .
+org:memberOf      a owl:ObjectProperty ; rdfs:label "memberOf (convenience inverse)" .
