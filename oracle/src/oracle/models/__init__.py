@@ -43,6 +43,23 @@ class TranscriptStep(BaseModel):
     result_hash: str
     cryptosuite: str | None = None
     prov_activity: AnyUrl
+    was_informed_by: AnyUrl | None = None
+
+
+class Transcript(BaseModel):
+    """Linear chain of TranscriptStep records over a single cert run.
+
+    Per Transcript Replay Semantics §1+§5: the chain's hash sequence is a Merkle
+    commitment to the entire cert computation. ``genesis_inputs_hash`` is the
+    active-suite hash over the canonical input dataset; ``steps[0].inputs_hash``
+    MUST equal ``genesis_inputs_hash``; ``steps[k].inputs_hash`` MUST equal
+    ``steps[k-1].result_hash`` for ``k ≥ 1``.
+    """
+
+    run_id: UUID
+    genesis_inputs_hash: str
+    steps: tuple[TranscriptStep, ...]
+    cryptosuite: str
 
 
 class GapRecord(BaseModel):
@@ -94,6 +111,7 @@ __all__ = [
     "GapCode",
     "GapRecord",
     "Scope",
+    "Transcript",
     "TranscriptStep",
     "TranscriptStepKind",
 ]

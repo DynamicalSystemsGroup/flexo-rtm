@@ -40,8 +40,7 @@ def test_cli_help_exits_zero() -> None:
         timeout=30,
     )
     assert result.returncode == 0, (
-        f"--help exited {result.returncode}\n"
-        f"stdout:{result.stdout}\nstderr:{result.stderr}"
+        f"--help exited {result.returncode}\nstdout:{result.stdout}\nstderr:{result.stderr}"
     )
     assert "flexo-rtm" in result.stdout.lower() or "usage" in result.stdout.lower()
 

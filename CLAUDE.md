@@ -34,6 +34,7 @@ Slice 2 — scope materialisation + transcript + audit report shape (X1, X3, X4 
 Track inconsistencies between this repo and the canonical research repo. Each entry names what diverged, the chosen resolution, and the research-repo file that should be reconciled in its next normal-course revision.
 
 - **`TranscriptStep.step_kind` enum.** [`Design Spec`](/Users/z/Documents/GitHub/flexo-rtm-research/wiki/Design Spec.md) §7.4 lists `"sparql", "shacl", "canonicalize", "fetch", "verify-signature"`; [`Transcript Replay Semantics`](/Users/z/Documents/GitHub/flexo-rtm-research/wiki/Transcript Replay Semantics.md) §2 + §4a lists `"sparql", "shacl", "canonicalize", "kc-operation", "delegated-numerical"` (the latter wired to [`ADR-027`](/Users/z/Documents/GitHub/flexo-rtm-research/wiki/ADR-027 Bit-Exactness vs Numerical Tolerances Are Both First-Class.md)). Resolution chosen 2026-05-18: companion wins; [`oracle/models`](oracle/src/oracle/models/__init__.py) uses the companion's five. Research repo to reconcile: update Design Spec §7.4 to match the companion in its next revision.
+- **`TranscriptStep.was_informed_by` field.** Design Spec §7.4 omits the prov-chain pointer; companion §2 makes `prov:wasInformedBy` mandatory and §3 builds the replay algorithm on it. Resolution chosen 2026-05-18 (same precedent: companion wins): [`oracle/models`](oracle/src/oracle/models/__init__.py) adds `was_informed_by: AnyUrl | None` and a new `Transcript` chain wrapper. Research repo to reconcile: add the field + a `Transcript` chain model to Design Spec §7.4.
 
 ## Style
 
