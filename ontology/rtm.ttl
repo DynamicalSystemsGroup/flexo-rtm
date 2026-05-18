@@ -1,3 +1,4 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix earl: <http://www.w3.org/ns/earl#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix org: <http://www.w3.org/ns/org#> .
@@ -5,6 +6,12 @@
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix rtm: <https://flexo-rtm.dev/ontology#> .
+
+dcat:Distribution a owl:Class ;
+    rdfs:label "Distribution (optional)" .
+
+dcat:downloadURL a owl:ObjectProperty ;
+    rdfs:label "downloadURL (mirror / fetch URL; informational)" .
 
 earl:assertedBy a owl:ObjectProperty ;
     rdfs:domain earl:Assertion .
@@ -121,6 +128,10 @@ foaf:name a owl:DatatypeProperty ;
     rdfs:label "flexo-rtm core ontology (slice 1 skeleton)" ;
     owl:versionInfo "0.0.1" .
 
+rtm:Activity a owl:Class ;
+    rdfs:label "Activity (a process: sim run, model build, test exec, …)" ;
+    rdfs:subClassOf prov:Activity .
+
 rtm:AdequacyAttestation a owl:Class ;
     rdfs:label "Adequacy attestation (over an artifact/requirement pair)" ;
     rdfs:subClassOf rtm:Attestation .
@@ -170,6 +181,10 @@ rtm:attributeMinValue a owl:DatatypeProperty ;
 rtm:attributeValue a owl:DatatypeProperty ;
     rdfs:label "attributeValue" .
 
+rtm:contentHashes a owl:ObjectProperty ;
+    rdfs:label "contentHashes (list of manifest entries)" ;
+    rdfs:domain rtm:ReproducibilityManifest .
+
 rtm:deferred a rtm:AttestationStatus ;
     rdfs:label "deferred" .
 
@@ -184,6 +199,10 @@ rtm:extends a owl:ObjectProperty ;
 rtm:fail a rtm:AttestationStatus ;
     rdfs:label "fail" .
 
+rtm:gitRefs a owl:ObjectProperty ;
+    rdfs:label "gitRefs (list of manifest entries)" ;
+    rdfs:domain rtm:ReproducibilityManifest .
+
 rtm:hasAspect a owl:ObjectProperty ;
     rdfs:label "hasAspect" ;
     rdfs:range rtm:Aspect .
@@ -192,8 +211,23 @@ rtm:hasAttribute a owl:ObjectProperty ;
     rdfs:label "hasAttribute" ;
     rdfs:range rtm:Attribute .
 
+rtm:hasContentHash a owl:DatatypeProperty ;
+    rdfs:label "hasContentHash (algo:hex; suite-derived per ADR-026)" .
+
 rtm:hasExternalIdentity a owl:DatatypeProperty ;
     rdfs:label "hasExternalIdentity (provider-prefixed identity string)" .
+
+rtm:hasGitCommit a owl:DatatypeProperty ;
+    rdfs:label "hasGitCommit (SHA-1 or SHA-256 hex)" .
+
+rtm:hasGitPath a owl:DatatypeProperty ;
+    rdfs:label "hasGitPath (path within the repo)" .
+
+rtm:hasGitRepo a owl:DatatypeProperty ;
+    rdfs:label "hasGitRepo (HTTPS URL)" .
+
+rtm:hasOCIImage a owl:DatatypeProperty ;
+    rdfs:label "hasOCIImage (registry/image@algo:digest)" .
 
 rtm:hasQualifiedRole a owl:ObjectProperty ;
     rdfs:label "hasQualifiedRole (org → role; ADR-028 federated audit)" .
@@ -211,6 +245,10 @@ rtm:intersectsWith a owl:ObjectProperty ;
     rdfs:domain rtm:Scope ;
     rdfs:range rtm:Scope .
 
+rtm:ociImages a owl:ObjectProperty ;
+    rdfs:label "ociImages (list of manifest entries)" ;
+    rdfs:domain rtm:ReproducibilityManifest .
+
 rtm:pass a rtm:AttestationStatus ;
     rdfs:label "pass" .
 
@@ -222,6 +260,9 @@ rtm:permitsAspect a owl:ObjectProperty ;
 rtm:permitsAttestationType a owl:ObjectProperty ;
     rdfs:label "permitsAttestationType" ;
     rdfs:domain rtm:Policy .
+
+rtm:referencedBy a owl:ObjectProperty ;
+    rdfs:label "referencedBy (manifest entry → resources that cite this URI)" .
 
 rtm:requiresAttribute a owl:ObjectProperty ;
     rdfs:label "requiresAttribute" ;
@@ -238,6 +279,18 @@ rtm:scopedTo a owl:ObjectProperty ;
 rtm:status a owl:ObjectProperty ;
     rdfs:label "status (pass | fail | deferred | deprecated)" ;
     rdfs:domain rtm:Attestation .
+
+rtm:totalContentHashes a owl:DatatypeProperty ;
+    rdfs:label "totalContentHashes" ;
+    rdfs:domain rtm:ReproducibilityManifest .
+
+rtm:totalGitRefs a owl:DatatypeProperty ;
+    rdfs:label "totalGitRefs (xsd:integer)" ;
+    rdfs:domain rtm:ReproducibilityManifest .
+
+rtm:totalOCIImages a owl:DatatypeProperty ;
+    rdfs:label "totalOCIImages" ;
+    rdfs:domain rtm:ReproducibilityManifest .
 
 rtm:union a owl:ObjectProperty ;
     rdfs:label "union (disjunctive composition; rare)" ;
@@ -297,6 +350,9 @@ earl:TestResult a owl:Class ;
 
 rtm:Attestation a owl:Class ;
     rdfs:label "Attestation (named-approver assertion)" .
+
+rtm:ReproducibilityManifest a owl:Class ;
+    rdfs:label "ReproducibilityManifest (enumerates every external URI a cert depends on)" .
 
 prov:Activity a owl:Class ;
     rdfs:label "Activity" .

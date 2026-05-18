@@ -88,7 +88,15 @@ vocabularies:
     extracted_properties:
       - { iri: "foaf:name", purpose: "human-readable name" }
       - { iri: "foaf:mbox", purpose: "email contact" }
-  - { name: DCAT,         iri: "http://www.w3.org/ns/dcat#",                                      source_file: ontology/imports/dcat.ttl,            extract_method: MIREOT,           extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
+  - name: DCAT
+    iri: "http://www.w3.org/ns/dcat#"
+    source_file: ontology/imports/dcat.ttl
+    extract_method: hand-curated
+    target_extract_file: parsimony/extracts/dcat-subset.ttl
+    extracted_classes:
+      - { iri: "dcat:Distribution", purpose: "optional: adopters who describe download distributions" }
+    extracted_properties:
+      - { iri: "dcat:downloadURL", purpose: "optional fetch URL for rtm:Artifact (External URI Rules §3.6)" }
   - { name: OSLC-RM,      iri: "http://open-services.net/ns/rm#",                                 source_file: ontology/imports/oslc-rm.ttl,         extract_method: SPARQL_CONSTRUCT, extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
   - { name: OSLC-QM,      iri: "http://open-services.net/ns/qm#",                                 source_file: ontology/imports/oslc-qm.ttl,         extract_method: SPARQL_CONSTRUCT, extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
   - { name: omg-sysml,    iri: "https://www.omg.org/spec/SysML/20240801/SysML#",                  source_file: ontology/imports/omg-sysml-v1.ttl,    extract_method: SLME,             extracted_classes: [], extracted_properties: [], extracted_individuals: [] }

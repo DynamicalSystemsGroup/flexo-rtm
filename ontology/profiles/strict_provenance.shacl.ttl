@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# strict-provenance profile — External URI Rules §5.
+# When activated, every rtm:Activity MUST carry at least one of:
+#   - rtm:hasGitCommit (with a corresponding rtm:hasGitRepo)
+#   - rtm:hasOCIImage
+# In default mode (profile inactive) the same constraint downgrades to a
+# warning expressed by the runtime, not by SHACL.
+
+@prefix rtm: <https://flexo-rtm.dev/ontology#> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+
+rtm:StrictActivityProvenanceShape
+    a sh:NodeShape ;
+    sh:targetClass rtm:Activity ;
+    sh:or (
+        [ sh:property [ sh:path rtm:hasGitCommit ; sh:minCount 1 ] ]
+        [ sh:property [ sh:path rtm:hasOCIImage  ; sh:minCount 1 ] ]
+    ) ;
+    sh:severity sh:Violation ;
+    sh:message "Under strict-provenance, every rtm:Activity must reference git or OCI" .

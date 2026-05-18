@@ -1,0 +1,48 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# External URI format SHACL — External URI Rules §3.
+# Always-active format validation; the strict-provenance profile (see
+# ontology/profiles/strict_provenance.shacl.ttl) adds presence requirements.
+
+@prefix rtm:  <https://flexo-rtm.dev/ontology#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+rtm:HasGitRepoShape a sh:NodeShape ;
+    sh:targetSubjectsOf rtm:hasGitRepo ;
+    sh:property [
+        sh:path rtm:hasGitRepo ;
+        sh:datatype xsd:string ;
+        sh:pattern "^https://[a-zA-Z0-9.-]+/[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+(\\.git)?/?$" ;
+        sh:message "rtm:hasGitRepo must be an HTTPS URL of the form https://host/org/repo"
+    ] .
+
+rtm:HasGitCommitShape a sh:NodeShape ;
+    sh:targetSubjectsOf rtm:hasGitCommit ;
+    sh:property [
+        sh:path rtm:hasGitCommit ;
+        sh:datatype xsd:string ;
+        sh:or (
+            [ sh:pattern "^[0-9a-f]{40}$" ]
+            [ sh:pattern "^[0-9a-f]{64}$" ]
+        ) ;
+        sh:message "rtm:hasGitCommit must be a 40-char SHA-1 or 64-char SHA-256 hex string"
+    ] .
+
+rtm:HasContentHashShape a sh:NodeShape ;
+    sh:targetSubjectsOf rtm:hasContentHash ;
+    sh:property [
+        sh:path rtm:hasContentHash ;
+        sh:datatype xsd:string ;
+        sh:pattern "^(sha256|sha384|sha512|sha3-256|sha3-512|ipfs|cid):[a-zA-Z0-9+/=_-]+$" ;
+        sh:message "rtm:hasContentHash must be 'algo:hex-or-base64' with a recognized algorithm"
+    ] .
+
+rtm:HasOCIImageShape a sh:NodeShape ;
+    sh:targetSubjectsOf rtm:hasOCIImage ;
+    sh:property [
+        sh:path rtm:hasOCIImage ;
+        sh:datatype xsd:string ;
+        sh:pattern "^[a-z0-9.-]+(:[0-9]+)?/[a-z0-9._/-]+@sha[0-9]+:[0-9a-f]+$" ;
+        sh:message "rtm:hasOCIImage must include a digest (registry/image@sha256:digest)"
+    ] .

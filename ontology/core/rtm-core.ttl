@@ -145,3 +145,30 @@ rtm:extends           a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:range 
 rtm:intersectsWith    a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:range rtm:Scope ; rdfs:label "intersectsWith" .
 rtm:union             a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:range rtm:Scope ; rdfs:label "union (disjunctive composition; rare)" .
 rtm:asotHeldBy        a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:label "asotHeldBy (org IRI; ADR-030)" .
+
+# --- external URI vocabulary (Design Spec §4.4, ADR-022) --------------------
+
+rtm:Activity
+    a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Activity (a process: sim run, model build, test exec, …)" .
+
+rtm:hasGitRepo    a owl:DatatypeProperty ; rdfs:label "hasGitRepo (HTTPS URL)" .
+rtm:hasGitCommit  a owl:DatatypeProperty ; rdfs:label "hasGitCommit (SHA-1 or SHA-256 hex)" .
+rtm:hasGitPath    a owl:DatatypeProperty ; rdfs:label "hasGitPath (path within the repo)" .
+rtm:hasContentHash a owl:DatatypeProperty ; rdfs:label "hasContentHash (algo:hex; suite-derived per ADR-026)" .
+rtm:hasOCIImage   a owl:DatatypeProperty ; rdfs:label "hasOCIImage (registry/image@algo:digest)" .
+
+# --- reproducibility manifest (External URI Rules §8) -----------------------
+
+rtm:ReproducibilityManifest
+    a owl:Class ;
+    rdfs:label "ReproducibilityManifest (enumerates every external URI a cert depends on)" .
+
+rtm:totalGitRefs       a owl:DatatypeProperty ; rdfs:domain rtm:ReproducibilityManifest ; rdfs:label "totalGitRefs (xsd:integer)" .
+rtm:totalContentHashes a owl:DatatypeProperty ; rdfs:domain rtm:ReproducibilityManifest ; rdfs:label "totalContentHashes" .
+rtm:totalOCIImages     a owl:DatatypeProperty ; rdfs:domain rtm:ReproducibilityManifest ; rdfs:label "totalOCIImages" .
+rtm:gitRefs            a owl:ObjectProperty   ; rdfs:domain rtm:ReproducibilityManifest ; rdfs:label "gitRefs (list of manifest entries)" .
+rtm:contentHashes      a owl:ObjectProperty   ; rdfs:domain rtm:ReproducibilityManifest ; rdfs:label "contentHashes (list of manifest entries)" .
+rtm:ociImages          a owl:ObjectProperty   ; rdfs:domain rtm:ReproducibilityManifest ; rdfs:label "ociImages (list of manifest entries)" .
+rtm:referencedBy       a owl:ObjectProperty   ; rdfs:label "referencedBy (manifest entry → resources that cite this URI)" .

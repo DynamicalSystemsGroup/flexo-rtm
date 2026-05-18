@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# DCAT subset (hand-curated for slice 5). Only dcat:downloadURL is used by
+# flexo-rtm v0.1, for optional fetch URLs alongside content-addressed references.
+
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+dcat:Distribution a owl:Class ; rdfs:label "Distribution (optional)" .
+dcat:downloadURL  a owl:ObjectProperty ; rdfs:label "downloadURL (mirror / fetch URL; informational)" .

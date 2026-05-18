@@ -44,6 +44,7 @@ packages = ["oracle/src/oracle"]
 testpaths = ["tests"]
 markers = [
     "live: integration test requiring live external service (auto-skipped without credentials)",
+    "network: integration test requiring network access (auto-skipped unless FLEXO_RTM_NETWORK_TESTS is set)",
 ]
 
 [tool.ruff]
