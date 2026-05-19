@@ -8,9 +8,33 @@ A verifiable self-certification oracle for **bidirectional requirements traceabi
 
 ## Status
 
-**Pre-v0.1.** Engineering substrate, scope+coverage analysis, transcript record/replay, identity adapters + policy SHACL, external URI references + reproducibility manifest, OSLC-RM/QM source-preserving adapter, and the SHACL-enforced named-approver constraint are in place. Subsequent slices add SysMLv2 ingestion, Flexo storage, signed envelopes, and federated audit composition.
+**v0.1.0-rc1** — all 11 slices of the v0.1 roadmap landed; every named acceptance criterion in [Design Spec §6](https://github.com/dynamicalsystemsgroup/flexo-rtm-research/wiki/Design-Spec) (F1–F7, O1–O7, I1–I8, U1–U6, S1–S5, X1–X8) is covered by either a green conformance test or a `@pytest.mark.{live,network}` test that auto-skips without credentials. **170+ tests pass; ruff + mypy --strict clean; assembled `rtm.ttl` ≤ 500 triples (budget 2000).**
 
-The design is fully specified in the companion research repo: [`flexo-rtm-research`](https://github.com/dynamicalsystemsgroup/flexo-rtm-research). The canonical [Design Spec](https://github.com/dynamicalsystemsgroup/flexo-rtm-research/wiki/Design-Spec) §6 defines the 45 binary acceptance criteria this codebase targets.
+The design is fully specified in the companion research repo: [`flexo-rtm-research`](https://github.com/dynamicalsystemsgroup/flexo-rtm-research). The canonical [Design Spec](https://github.com/dynamicalsystemsgroup/flexo-rtm-research/wiki/Design-Spec) §6 enumerates the 45 binary acceptance criteria this codebase targets.
+
+## Usage
+
+```bash
+# Rebuild the assembled ontology and report triple count
+uv run flexo-rtm parsimony
+
+# Run an audit against an RDF input file
+uv run flexo-rtm certify \
+    --input examples/adcs-corpus/rtm.ttl \
+    --scope https://rtm.example/scope/adcs \
+    --out audit-report.json
+
+# Activate SHACL profiles (composable, all off by default)
+uv run flexo-rtm certify -i my-model.ttl -s https://my.example/scope/X \
+    --profile signed-commits \
+    --profile data-integrity-attestations \
+    --profile composition-adequacy
+
+# JSON-only output (no file)
+uv run flexo-rtm certify -i my-model.ttl -s https://my.example/scope/X
+```
+
+`flexo-rtm certify` emits an :class:`oracle.models.AuditReport` JSON document: per-dimension coverage stats, scope IRI, transcript IRI, reproducibility manifest IRI, and a `certified` boolean derived from the coverage thresholds. The exit code is 1 when `certified` is false, 0 otherwise — suitable for CI integration.
 
 ## Asymmetric audit semantics (vs OSLC)
 
