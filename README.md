@@ -8,9 +8,13 @@ A verifiable self-certification oracle for **bidirectional requirements traceabi
 
 ## Status
 
-**Pre-v0.1, slice 1.** Engineering substrate, ontology core skeleton, and the SHACL-enforced named-approver constraint are in place. Subsequent slices add analysis, identity, external URI references, OSLC adapters, SysMLv2 ingestion, Flexo storage, signed envelopes, and federated audit composition.
+**Pre-v0.1.** Engineering substrate, scope+coverage analysis, transcript record/replay, identity adapters + policy SHACL, external URI references + reproducibility manifest, OSLC-RM/QM source-preserving adapter, and the SHACL-enforced named-approver constraint are in place. Subsequent slices add SysMLv2 ingestion, Flexo storage, signed envelopes, and federated audit composition.
 
-The design is fully specified in the companion research repo: [`flexo-rtm-research`](https://github.com/dynamicalsystemsgroup/flexo-rtm-research). The canonical [Design Spec](https://github.com/dynamicalsystemsgroup/flexo-rtm-research/wiki/Design-Spec) §6 defines the 45 binary acceptance criteria that this codebase targets.
+The design is fully specified in the companion research repo: [`flexo-rtm-research`](https://github.com/dynamicalsystemsgroup/flexo-rtm-research). The canonical [Design Spec](https://github.com/dynamicalsystemsgroup/flexo-rtm-research/wiki/Design-Spec) §6 defines the 45 binary acceptance criteria this codebase targets.
+
+## Asymmetric audit semantics (vs OSLC)
+
+flexo-rtm's audit bar is strictly higher than OSLC's: we distinguish evidence (`rtm:addresses`) from judgment (`rtm:SatisfactionAttestation`). A graph that passes OSLC's traceability bar may fail a flexo-rtm audit because we flag missing explicit human attestations. **Roundtrips through OSLC are not identity** — exporting a flexo-rtm cert artifact to OSLC drops attestation structure (or carries it as opaque Layer C extensions that other OSLC clients can't interpret). flexo-rtm strictly *extends* OSLC; OSLC is a strict semantic subset. See [CLAUDE.md §Asymmetric audit semantics](CLAUDE.md) and [research-repo issue #15](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/issues/15).
 
 ## Install
 
