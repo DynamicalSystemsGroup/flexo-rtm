@@ -5,8 +5,8 @@ help:
 	@echo "Targets:"
 	@echo "  sync       - uv sync (install env + dev deps)"
 	@echo "  test       - uv run pytest -q"
-	@echo "  lint       - uv run ruff check + uv run mypy"
-	@echo "  format     - uv run ruff format"
+	@echo "  lint       - uv run ruff check + uv run ruff format --check + uv run mypy (matches CI)"
+	@echo "  format     - uv run ruff format (auto-fix)"
 	@echo "  parsimony  - build ontology/rtm.ttl and report triple count"
 	@echo "  all        - parsimony + lint + test"
 	@echo "  clean      - remove caches and build outputs"
@@ -19,6 +19,7 @@ test:
 
 lint:
 	uv run ruff check .
+	uv run ruff format --check .
 	uv run mypy
 
 format:
