@@ -347,6 +347,15 @@ rtm:ociImages a owl:ObjectProperty ;
     rdfs:label "ociImages (list of manifest entries)" ;
     rdfs:domain rtm:ReproducibilityManifest .
 
+rtm:onBranch a owl:DatatypeProperty ;
+    rdfs:label "onBranch (commit Activity → branch name)" ;
+    rdfs:domain prov:Activity .
+
+rtm:parentCommit a owl:ObjectProperty ;
+    rdfs:label "parentCommit (commit Activity → prior commit Activity)" ;
+    rdfs:domain prov:Activity ;
+    rdfs:range prov:Activity .
+
 rtm:pass a rtm:AttestationStatus ;
     rdfs:label "pass" .
 
@@ -401,6 +410,11 @@ rtm:verifies a owl:ObjectProperty ;
 rtm:withinScope a owl:ObjectProperty ;
     rdfs:label "withinScope" ;
     rdfs:domain rtm:Policy ;
+    rdfs:range rtm:Scope .
+
+rtm:writesScope a owl:ObjectProperty ;
+    rdfs:label "writesScope (commit Activity → scope IRI; round-trip per F4)" ;
+    rdfs:domain prov:Activity ;
     rdfs:range rtm:Scope .
 
 omg-sysml:Action a owl:Class ;
@@ -560,14 +574,14 @@ rtm:Artifact a owl:Class ;
     rdfs:label "Artifact (verification evidence)" ;
     rdfs:subClassOf prov:Entity .
 
-prov:Activity a owl:Class ;
-    rdfs:label "Activity" .
-
 prov:Entity a owl:Class ;
     rdfs:label "Entity" .
 
 omg-sysml:Element a owl:Class ;
     rdfs:label "Element" .
+
+prov:Activity a owl:Class ;
+    rdfs:label "Activity" .
 
 rtm:Scope a owl:Class ;
     rdfs:label "Scope (named graph functioning as an ASOT)" .

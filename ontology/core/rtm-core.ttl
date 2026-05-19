@@ -175,6 +175,14 @@ rtm:Activity
     rdfs:subClassOf prov:Activity ;
     rdfs:label "Activity (a process: sim run, model build, test exec, …)" .
 
+# --- commit metadata (Flexo REST Binding §5.2) ------------------------------
+
+rtm:writesScope   a owl:ObjectProperty   ; rdfs:domain prov:Activity ; rdfs:range rtm:Scope ; rdfs:label "writesScope (commit Activity → scope IRI; round-trip per F4)" .
+rtm:onBranch      a owl:DatatypeProperty ; rdfs:domain prov:Activity ; rdfs:label "onBranch (commit Activity → branch name)" .
+rtm:parentCommit  a owl:ObjectProperty   ; rdfs:domain prov:Activity ; rdfs:range prov:Activity ; rdfs:label "parentCommit (commit Activity → prior commit Activity)" .
+
+# --- external URI vocabulary (existing) -------------------------------------
+
 rtm:hasGitRepo    a owl:DatatypeProperty ; rdfs:label "hasGitRepo (HTTPS URL)" .
 rtm:hasGitCommit  a owl:DatatypeProperty ; rdfs:label "hasGitCommit (SHA-1 or SHA-256 hex)" .
 rtm:hasGitPath    a owl:DatatypeProperty ; rdfs:label "hasGitPath (path within the repo)" .
