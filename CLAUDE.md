@@ -35,6 +35,30 @@ The **implementation** of `flexo-rtm` — a verifiable self-certification oracle
 
 The discipline is the same the engineer skill enforces in its catechism: never paraphrase, never silently resolve, always file when in doubt.
 
+### User testing as structured coupling
+
+The coupling loop has two channels, and they are not equivalent:
+
+1. **Ad-hoc behavior observation** — CI failures, integration-test surprises, bug reports, live-test divergences. Filed when noticed.
+2. **Structured user testing (UAT)** — scheduled exercise of the shipped framework against a realistic engineering arc, with a human driving the skills and the LLM running the catechisms. The two have different roles in V&V: CI verifies the framework runs mechanically; UAT validates whether the framework **expresses what an engineer needs to say**. CI cannot replace UAT — verification cannot substitute for validation.
+
+**Artifacts owned by this repo:**
+
+- [`tests/acceptance/`](tests/acceptance/) — versioned walkthrough scripts, one per skill role (engineer / reviewer / auditor / reconcile). These are NOT pytest tests; they are scripts a human runs in conversation with the LLM. Pass criteria are runnable CLI commands with pinned expected outputs.
+
+**Artifacts owned by the research repo:**
+
+- [`wiki/User Testing Experiment <N>.md`](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/wiki/User-Testing-Experiment-1) — numbered consolidation pages capturing scope-covered + findings + links to the issues filed. Experiment #1 is the precedent ([`User Testing Experiment 1`](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/wiki/User-Testing-Experiment-1)).
+
+**During a UAT, this repo's responsibility:**
+
+- Drive the walkthrough script as written; deviate when the engineer's natural workflow demands it (the v1 walkthrough scripts are known to not anticipate every ontology gap).
+- Capture findings inline as research-repo issues; do not buffer.
+- If a finding is purely an impl-side gap (CLI bug, missing flag, wrong default), file as an impl-repo issue instead.
+- Update walkthrough scripts post-experiment if the natural workflow diverged structurally from the script.
+
+v0.1 was built against the Design Spec's 45 acceptance criteria (verification ground); v0.2's vocabulary direction is driven by UAT findings (validation ground). The two grounds are complementary and the impl repo lives at the verification end of the coupling loop.
+
 ## Issue dashboards (the loop's status board)
 
 Both repos' open issues are mirrored to wiki pages in the research repo:
