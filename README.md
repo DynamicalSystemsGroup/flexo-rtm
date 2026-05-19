@@ -50,6 +50,24 @@ make lint         # ruff + mypy
 make all          # parsimony + lint + test
 ```
 
+## Working with SysMLv2 sources (openCAESAR is an external dependency)
+
+`flexo-rtm` is RDF-native. Its SysMLv2 adapter reads and writes **`omg-sysml:` RDF only** — the canonical [openCAESAR OWL rendering](https://github.com/dynamicalsystemsgroup/flexo-rtm-research/wiki/OMG-SysMLv2) of OMG SysMLv2 1.0. Converting between `omg-sysml:` RDF and SysMLv2's native formats (`.kerml`, `.sysml`, `.sysml.json`) is **not** in flexo-rtm's scope; that's openCAESAR's `owl-adapter` (MOF2OML + OWL) toolchain's job in both directions.
+
+| Adopter source-of-truth | What you need | What flexo-rtm does |
+|---|---|---|
+| `omg-sysml:` RDF already (`.ttl`, `.nt`, `.jsonld`) | nothing extra | reads/writes the RDF directly |
+| SysMLv2 native (`.kerml` / `.sysml` / `.sysml.json`) | openCAESAR's `owl-adapter` toolchain | reads converted RDF; emits per-file RDF for re-conversion |
+
+Bidirectional adopter workflow:
+
+```
+Ingest:        SysMLv2 source → openCAESAR owl-adapter → omg-sysml: RDF → flexo-rtm
+Write-back:    flexo-rtm → omg-sysml: RDF → openCAESAR owl-adapter → SysMLv2 source
+```
+
+flexo-rtm pins to **OMG SysMLv2 1.0** (formal/2024-08-01) and **openCAESAR rendering v1.x** per [SysMLv2 Ingestion Contract](https://github.com/dynamicalsystemsgroup/flexo-rtm-research/wiki/SysMLv2-Ingestion-Contract) §2. The openCAESAR toolchain is **not** installed by `pip install flexo-rtm` or `uv sync` — it's a separate JVM-based dependency adopters install only if their source-of-truth is SysMLv2 native rather than pre-converted RDF. The research wiki's [OMG SysMLv2 page](https://github.com/dynamicalsystemsgroup/flexo-rtm-research/wiki/OMG-SysMLv2) has the rendering details and version-skew policy; the canonical project location is openCAESAR (see research-repo [issue #19](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/issues/19) tracking the addition of a concrete URL to the contract).
+
 ## License
 
 Three-license split — see [LICENSE.md](LICENSE.md). Code: Apache-2.0. Docs: CC-BY-4.0. Ontology: CC0-1.0.
