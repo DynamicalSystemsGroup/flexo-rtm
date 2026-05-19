@@ -40,9 +40,7 @@ VECTOR_URL = (
     "https://raw.githubusercontent.com/w3c/vc-di-eddsa/main/"
     "TestVectors/eddsa-rdfc-2022/signedDataInt.json"
 )
-KEYPAIR_URL = (
-    "https://raw.githubusercontent.com/w3c/vc-di-eddsa/main/TestVectors/keyPair.json"
-)
+KEYPAIR_URL = "https://raw.githubusercontent.com/w3c/vc-di-eddsa/main/TestVectors/keyPair.json"
 
 _B58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
@@ -106,6 +104,5 @@ def test_w3c_eddsa_rdfc_2022_reference_vector_verifies() -> None:
         verification_method=verification_method,
     )
     assert verified, (
-        "W3C eddsa-rdfc-2022 reference vector did not verify — see docstring "
-        "for likely divergences"
+        "W3C eddsa-rdfc-2022 reference vector did not verify — see docstring for likely divergences"
     )

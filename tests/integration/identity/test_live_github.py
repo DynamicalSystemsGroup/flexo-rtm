@@ -51,9 +51,7 @@ def test_live_octocat_projects_to_well_formed_rdf() -> None:
     g = project_github_user(payload)
 
     person = URIRef(f"https://flexo-rtm.dev/identity/github/{STABLE_LOGIN}")
-    assert (person, RDF.type, FOAF.Person) in g, (
-        "projection missing FOAF.Person typing"
-    )
+    assert (person, RDF.type, FOAF.Person) in g, "projection missing FOAF.Person typing"
 
     ext_ids = [str(o) for o in g.objects(person, RTM.hasExternalIdentity)]
     assert f"github:{STABLE_LOGIN}" in ext_ids, (

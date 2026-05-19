@@ -115,9 +115,7 @@ def check_git_commit_exists(*, repo: str, commit: str) -> FetchResult:
         return FetchResult(ok=False, detail=f"git probe failed: {exc}")
     if proc.returncode != 0:
         stderr = proc.stderr.strip()[:200] or "no error output"
-        return FetchResult(
-            ok=False, detail=f"commit {commit} not found on {repo}: {stderr}"
-        )
+        return FetchResult(ok=False, detail=f"commit {commit} not found on {repo}: {stderr}")
     return FetchResult(ok=True, detail=f"commit {commit} reachable on {repo}")
 
 
