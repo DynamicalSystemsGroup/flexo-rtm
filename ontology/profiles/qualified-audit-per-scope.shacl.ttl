@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# qualified-audit-per-scope profile — Federated Audit and Composition §Profiles.
+# Every rtm:Scope must carry at least one rtm:ScopeCertificationAttestation;
+# adopters tighten the count + audit-mode requirements via SufficiencyCriteria.
+
+@prefix rtm: <https://flexo-rtm.dev/ontology#> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+
+rtm:QualifiedAuditPerScopeShape
+    a sh:NodeShape ;
+    sh:targetClass rtm:Scope ;
+    sh:sparql [
+        sh:message "Every rtm:Scope must carry at least one rtm:ScopeCertificationAttestation (qualified-audit-per-scope profile)" ;
+        sh:select """
+            PREFIX rtm: <https://flexo-rtm.dev/ontology#>
+            SELECT $this WHERE {
+                FILTER NOT EXISTS {
+                    ?att a rtm:ScopeCertificationAttestation ;
+                         rtm:attests $this .
+                }
+            }
+        """
+    ] .

@@ -247,8 +247,20 @@ rtm:AdequacyAttestation a owl:Class ;
     rdfs:label "Adequacy attestation (over an artifact/requirement pair)" ;
     rdfs:subClassOf rtm:Attestation .
 
+rtm:CompositionCoverageAttestation a owl:Class ;
+    rdfs:label "Composition-coverage attestation (constituent scopes adequately cover the system-of-interest)" ;
+    rdfs:subClassOf rtm:Attestation .
+
+rtm:CompositionSufficiencyAttestation a owl:Class ;
+    rdfs:label "Composition-sufficiency attestation (number + nature of signers is sufficient)" ;
+    rdfs:subClassOf rtm:Attestation .
+
 rtm:SatisfactionAttestation a owl:Class ;
     rdfs:label "Satisfaction attestation (over an rtm:addresses edge)" ;
+    rdfs:subClassOf rtm:Attestation .
+
+rtm:ScopeCertificationAttestation a owl:Class ;
+    rdfs:label "Scope-certification attestation (qualified-role or reproducibility audit on a scope)" ;
     rdfs:subClassOf rtm:Attestation .
 
 rtm:SufficiencyAttestation a owl:Class ;
@@ -259,17 +271,36 @@ rtm:appliesTo a owl:ObjectProperty ;
     rdfs:label "appliesTo (attestation → subject IRI; requirement for SatisfactionAttestation)" ;
     rdfs:domain rtm:Attestation .
 
+rtm:appliesToAspect a owl:ObjectProperty ;
+    rdfs:label "appliesToAspect (criterion → aspect IRI)" .
+
 rtm:appliesToRole a owl:ObjectProperty ;
     rdfs:label "appliesToRole" ;
     rdfs:domain rtm:Policy .
+
+rtm:appliesToSystemOfInterest a owl:ObjectProperty ;
+    rdfs:label "appliesToSystemOfInterest (composed scope → SoI IRI)" ;
+    rdfs:domain rtm:Scope .
 
 rtm:approvedBy a owl:ObjectProperty ;
     rdfs:label "approvedBy (named human IRI; SHACL-enforced)" ;
     rdfs:domain rtm:Attestation .
 
+rtm:approverOrganization a owl:ObjectProperty ;
+    rdfs:label "approverOrganization (org behind the named approver)" ;
+    rdfs:domain rtm:Attestation .
+
 rtm:asotHeldBy a owl:ObjectProperty ;
     rdfs:label "asotHeldBy (org IRI; ADR-030)" ;
     rdfs:domain rtm:Scope .
+
+rtm:atCommit a owl:DatatypeProperty ;
+    rdfs:label "atCommit (commit hash the scope cert attests against)" ;
+    rdfs:domain rtm:Attestation .
+
+rtm:attests a owl:ObjectProperty ;
+    rdfs:label "attests (scope-cert subject; complements rtm:appliesTo)" ;
+    rdfs:domain rtm:Attestation .
 
 rtm:attributeKey a owl:DatatypeProperty ;
     rdfs:label "attributeKey" .
@@ -279,6 +310,22 @@ rtm:attributeMinValue a owl:DatatypeProperty ;
 
 rtm:attributeValue a owl:DatatypeProperty ;
     rdfs:label "attributeValue" .
+
+rtm:audit-mode-qualified-role-review a rtm:AuditMode ;
+    rdfs:label "qualified-role-review" .
+
+rtm:audit-mode-reproducibility-full a rtm:AuditMode ;
+    rdfs:label "reproducibility-full" .
+
+rtm:audit-mode-reproducibility-partial a rtm:AuditMode ;
+    rdfs:label "reproducibility-partial" .
+
+rtm:audit-mode-review-only a rtm:AuditMode ;
+    rdfs:label "review-only" .
+
+rtm:auditMode a owl:ObjectProperty ;
+    rdfs:label "auditMode (review-only / reproducibility-partial / -full / qualified-role-review)" ;
+    rdfs:domain rtm:Attestation .
 
 rtm:contentHashes a owl:ObjectProperty ;
     rdfs:label "contentHashes (list of manifest entries)" ;
@@ -362,6 +409,10 @@ rtm:keyFingerprint a owl:DatatypeProperty ;
 rtm:keyType a owl:DatatypeProperty ;
     rdfs:label "keyType (openpgp / ssh-ed25519 / ssh-rsa / ssh-ecdsa / x509)" .
 
+rtm:minimumSigners a owl:DatatypeProperty ;
+    rdfs:label "minimumSigners (xsd:integer)" ;
+    rdfs:domain rtm:SufficiencyCriteria .
+
 rtm:ociImages a owl:ObjectProperty ;
     rdfs:label "ociImages (list of manifest entries)" ;
     rdfs:domain rtm:ReproducibilityManifest .
@@ -392,6 +443,10 @@ rtm:referencedBy a owl:ObjectProperty ;
 
 rtm:rekorLogEntry a owl:ObjectProperty ;
     rdfs:label "rekorLogEntry (attestation → Rekor transparency-log entry IRI)" .
+
+rtm:requiredAuditMode a owl:ObjectProperty ;
+    rdfs:label "requiredAuditMode (the audit mode each signer must use)" ;
+    rdfs:domain rtm:SufficiencyCriteria .
 
 rtm:requiresAttribute a owl:ObjectProperty ;
     rdfs:label "requiresAttribute" ;
@@ -579,6 +634,9 @@ rtm:Activity a owl:Class ;
 rtm:Aspect a owl:Class ;
     rdfs:label "Aspect (an axis a requirement is judged along: functional, safety, performance, ...)" .
 
+rtm:SufficiencyCriteria a owl:Class ;
+    rdfs:label "SufficiencyCriteria (RDF instance carrying signer-count thresholds + required modes)" .
+
 earl:Assertion a owl:Class ;
     rdfs:label "Assertion" .
 
@@ -587,6 +645,9 @@ prov:Agent a owl:Class ;
 
 rtm:AttestationStatus a owl:Class ;
     rdfs:label "AttestationStatus (one of: pass, fail, deferred, deprecated)" .
+
+rtm:AuditMode a owl:Class ;
+    rdfs:label "AuditMode" .
 
 rtm:Requirement a owl:Class ;
     rdfs:label "Requirement" .
@@ -613,9 +674,6 @@ rtm:Policy a owl:Class ;
 earl:TestResult a owl:Class ;
     rdfs:label "TestResult" .
 
-rtm:Attestation a owl:Class ;
-    rdfs:label "Attestation (named-approver assertion)" .
-
 rtm:ReproducibilityManifest a owl:Class ;
     rdfs:label "ReproducibilityManifest (enumerates every external URI a cert depends on)" .
 
@@ -631,6 +689,9 @@ omg-sysml:Element a owl:Class ;
 
 prov:Activity a owl:Class ;
     rdfs:label "Activity" .
+
+rtm:Attestation a owl:Class ;
+    rdfs:label "Attestation (named-approver assertion)" .
 
 rtm:Scope a owl:Class ;
     rdfs:label "Scope (named graph functioning as an ASOT)" .

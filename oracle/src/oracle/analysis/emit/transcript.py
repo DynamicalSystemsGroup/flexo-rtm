@@ -132,6 +132,17 @@ class ReplayResult:
     diverged_field: str | None
 
 
+def _execute_step(state: Graph, step: TranscriptStep) -> tuple[str | None, str | None]:
+    """Re-execute a single step against ``state``. Returns ``(computed_hash, diverged_field)``."""
+    if step.step_kind == "sparql":
+        if step.query_text is None:
+            return None, "query_text"
+        return _hash_select_result(state.query(step.query_text)), None
+    if step.step_kind == "canonicalize":
+        return canonicalize_graph(state).sha256_hex, None
+    return None, f"unsupported-step-kind:{step.step_kind}"
+
+
 def replay_transcript(transcript: Transcript, *, input_graph: Graph) -> ReplayResult:
     state = input_graph
     prev_hash = canonicalize_graph(state).sha256_hex
@@ -141,23 +152,50 @@ def replay_transcript(transcript: Transcript, *, input_graph: Graph) -> ReplayRe
     for step in sorted(transcript.steps, key=lambda s: s.seq):
         if step.inputs_hash != prev_hash:
             return ReplayResult(passed=False, diverged_at_seq=step.seq, diverged_field="inputs")
-
-        if step.step_kind == "sparql":
-            if step.query_text is None:
-                return ReplayResult(
-                    passed=False, diverged_at_seq=step.seq, diverged_field="query_text"
-                )
-            computed = _hash_select_result(state.query(step.query_text))
-        elif step.step_kind == "canonicalize":
-            computed = canonicalize_graph(state).sha256_hex
-        else:
-            # shacl / kc-operation / delegated-numerical land in slices 4-5.
+        computed, diverged_field = _execute_step(state, step)
+        if diverged_field is not None:
             return ReplayResult(
-                passed=False,
-                diverged_at_seq=step.seq,
-                diverged_field=f"unsupported-step-kind:{step.step_kind}",
+                passed=False, diverged_at_seq=step.seq, diverged_field=diverged_field
             )
+        if computed != step.result_hash:
+            return ReplayResult(passed=False, diverged_at_seq=step.seq, diverged_field="result")
+        prev_hash = step.result_hash
 
+    return ReplayResult(passed=True, diverged_at_seq=None, diverged_field=None)
+
+
+def replay_subchain(
+    transcript: Transcript,
+    *,
+    step_seqs: list[int] | tuple[int, ...] | frozenset[int],
+    input_graph: Graph,
+) -> ReplayResult:
+    """Replay a contiguous subset of ``transcript.steps`` — Federated Audit + X8.
+
+    Each party with permissions for a non-overlapping permission subset can
+    invoke this with the seqs they're authorized to verify. The subchain is
+    structurally complete in its local neighborhood: each step's recorded
+    ``inputs_hash`` is what we compare against (the chain anchor for the first
+    step in the subchain need not be the transcript's genesis).
+    """
+    requested = frozenset(step_seqs)
+    if not requested:
+        return ReplayResult(passed=True, diverged_at_seq=None, diverged_field=None)
+
+    state = input_graph
+    selected = [s for s in sorted(transcript.steps, key=lambda s: s.seq) if s.seq in requested]
+    if not selected:
+        return ReplayResult(passed=False, diverged_at_seq=0, diverged_field="no-steps-match-seqs")
+
+    prev_hash: str | None = None
+    for step in selected:
+        if prev_hash is not None and step.inputs_hash != prev_hash:
+            return ReplayResult(passed=False, diverged_at_seq=step.seq, diverged_field="inputs")
+        computed, diverged_field = _execute_step(state, step)
+        if diverged_field is not None:
+            return ReplayResult(
+                passed=False, diverged_at_seq=step.seq, diverged_field=diverged_field
+            )
         if computed != step.result_hash:
             return ReplayResult(passed=False, diverged_at_seq=step.seq, diverged_field="result")
         prev_hash = step.result_hash
@@ -168,6 +206,7 @@ def replay_transcript(transcript: Transcript, *, input_graph: Graph) -> ReplayRe
 __all__ = [
     "ReplayResult",
     "TranscriptRecorder",
+    "replay_subchain",
     "replay_transcript",
     "transcript_canonical_bytes",
 ]

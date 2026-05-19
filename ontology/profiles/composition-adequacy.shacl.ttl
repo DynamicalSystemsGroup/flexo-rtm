@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# composition-adequacy profile — Federated Audit and Composition §Profiles.
+# Every composed scope (one with rtm:union, rtm:extends, or rtm:intersectsWith
+# composition targets) MUST carry a rtm:CompositionCoverageAttestation.
+
+@prefix rtm: <https://flexo-rtm.dev/ontology#> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+
+rtm:CompositionAdequacyShape
+    a sh:NodeShape ;
+    sh:targetClass rtm:Scope ;
+    sh:sparql [
+        sh:message "Composed scope must carry an rtm:CompositionCoverageAttestation (composition-adequacy profile)" ;
+        sh:select """
+            PREFIX rtm: <https://flexo-rtm.dev/ontology#>
+            SELECT $this WHERE {
+                { $this rtm:union ?p } UNION { $this rtm:extends ?p } UNION { $this rtm:intersectsWith ?p }
+                FILTER NOT EXISTS {
+                    ?att a rtm:CompositionCoverageAttestation ;
+                         rtm:attests $this .
+                }
+            }
+        """
+    ] .

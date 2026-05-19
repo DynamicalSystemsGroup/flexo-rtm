@@ -38,8 +38,9 @@ The implementation of `flexo-rtm` — a verifiable self-certification oracle for
 | 7 | SysMLv2 read + per-file RDF write-back | §3 + SysMLv2-anchored profile + roundtrip |
 | 8 | Flexo storage adapter (InMemory + HTTPS backends) | F1–F7 |
 | 9 | Signed envelopes (5 profiles + VC-DI sign/verify) + git approver binding | S1–S5 + I7 |
+| 10 | Composition + federated audit ladder (3 attestation subclasses, 3 profiles, L1-L4 levels, sub-chain replay) | §4.8 + X7 + X8 |
 
-Next: slice 10 (composition + federated audit ladder — §4.8 + X7, X8).
+Next: slice 11 (CLI + property tests + docs polish).
 
 ## Asymmetric audit semantics (OSLC ↔ flexo-rtm)
 

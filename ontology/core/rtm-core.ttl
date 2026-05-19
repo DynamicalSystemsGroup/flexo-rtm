@@ -66,6 +66,23 @@ rtm:SufficiencyAttestation
     rdfs:subClassOf rtm:Attestation ;
     rdfs:label "Sufficiency attestation (over an artifact/requirement pair)" .
 
+# --- composition / federated audit subclasses (Design Spec §4.8, ADR-028) ----
+
+rtm:ScopeCertificationAttestation
+    a owl:Class ;
+    rdfs:subClassOf rtm:Attestation ;
+    rdfs:label "Scope-certification attestation (qualified-role or reproducibility audit on a scope)" .
+
+rtm:CompositionCoverageAttestation
+    a owl:Class ;
+    rdfs:subClassOf rtm:Attestation ;
+    rdfs:label "Composition-coverage attestation (constituent scopes adequately cover the system-of-interest)" .
+
+rtm:CompositionSufficiencyAttestation
+    a owl:Class ;
+    rdfs:subClassOf rtm:Attestation ;
+    rdfs:label "Composition-sufficiency attestation (number + nature of signers is sufficient)" .
+
 # --- attestation properties --------------------------------------------------
 
 rtm:approvedBy
@@ -121,6 +138,28 @@ rtm:scopedTo       a owl:ObjectProperty   ; rdfs:range rtm:Scope ; rdfs:label "s
 rtm:hasQualifiedRole
     a owl:ObjectProperty ;
     rdfs:label "hasQualifiedRole (org → role; ADR-028 federated audit)" .
+
+# --- federated audit + composition predicates (Federated Audit and Composition) ---
+
+rtm:approverOrganization      a owl:ObjectProperty ; rdfs:domain rtm:Attestation ; rdfs:label "approverOrganization (org behind the named approver)" .
+rtm:auditMode                 a owl:ObjectProperty ; rdfs:domain rtm:Attestation ; rdfs:label "auditMode (review-only / reproducibility-partial / -full / qualified-role-review)" .
+rtm:atCommit                  a owl:DatatypeProperty ; rdfs:domain rtm:Attestation ; rdfs:label "atCommit (commit hash the scope cert attests against)" .
+rtm:attests                   a owl:ObjectProperty ; rdfs:domain rtm:Attestation ; rdfs:label "attests (scope-cert subject; complements rtm:appliesTo)" .
+rtm:appliesToSystemOfInterest a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:label "appliesToSystemOfInterest (composed scope → SoI IRI)" .
+
+rtm:SufficiencyCriteria
+    a owl:Class ;
+    rdfs:label "SufficiencyCriteria (RDF instance carrying signer-count thresholds + required modes)" .
+
+rtm:minimumSigners    a owl:DatatypeProperty ; rdfs:domain rtm:SufficiencyCriteria ; rdfs:label "minimumSigners (xsd:integer)" .
+rtm:requiredAuditMode a owl:ObjectProperty   ; rdfs:domain rtm:SufficiencyCriteria ; rdfs:label "requiredAuditMode (the audit mode each signer must use)" .
+rtm:appliesToAspect   a owl:ObjectProperty   ; rdfs:label "appliesToAspect (criterion → aspect IRI)" .
+
+rtm:AuditMode a owl:Class ; rdfs:label "AuditMode" .
+rtm:audit-mode-review-only             a rtm:AuditMode ; rdfs:label "review-only" .
+rtm:audit-mode-reproducibility-partial a rtm:AuditMode ; rdfs:label "reproducibility-partial" .
+rtm:audit-mode-reproducibility-full    a rtm:AuditMode ; rdfs:label "reproducibility-full" .
+rtm:audit-mode-qualified-role-review   a rtm:AuditMode ; rdfs:label "qualified-role-review" .
 
 # --- public-key declarations for signed-commits profile (Signed Envelope Shapes §4.2) ---
 
