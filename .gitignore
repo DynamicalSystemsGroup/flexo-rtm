@@ -27,6 +27,11 @@ coverage.xml
 .vscode/
 *.swp
 
+# Local secrets — never commit (FLEXO_TOKEN, registry creds, etc.)
+.env
+.env.*
+!.env.example
+
 # Build outputs that ARE NOT git-tracked
 # (note: ontology/rtm.ttl IS tracked — it is the deterministic build product
 #  per Parsimony Manifest §5; do not ignore it.)
