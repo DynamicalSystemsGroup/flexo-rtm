@@ -8,9 +8,15 @@ A verifiable self-certification oracle for **bidirectional requirements traceabi
 
 ## Status
 
-**v0.1.0-rc1** — all 11 slices of the v0.1 roadmap landed; every named acceptance criterion in [Design Spec §6](https://github.com/dynamicalsystemsgroup/flexo-rtm-research/wiki/Design-Spec) (F1–F7, O1–O7, I1–I8, U1–U6, S1–S5, X1–X8) is covered by either a green conformance test or a `@pytest.mark.{live,network}` test that auto-skips without credentials. **170+ tests pass; ruff + mypy --strict clean; assembled `rtm.ttl` ≤ 500 triples (budget 2000).**
+**v0.1.0-rc1** — all 11 slices of the v0.1 roadmap landed; every named acceptance criterion in [Design Spec §6](https://github.com/dynamicalsystemsgroup/flexo-rtm-research/wiki/Design-Spec) (F1–F7, O1–O7, I1–I8, U1–U6, S1–S5, X1–X8) is covered by either a green conformance test or a `@pytest.mark.{live,network}` test that auto-skips without credentials. **217 tests pass** (225 with `FLEXO_RTM_NETWORK_TESTS=1` exercising the network + live paths; one xfail-marked test pinned to research-repo issue [#27](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/issues/27) for W3C VC-DI conformance). **ruff + mypy --strict clean; assembled `rtm.ttl` = 485 triples (budget 2000).**
 
-The design is fully specified in the companion research repo: [`flexo-rtm-research`](https://github.com/dynamicalsystemsgroup/flexo-rtm-research). The canonical [Design Spec](https://github.com/dynamicalsystemsgroup/flexo-rtm-research/wiki/Design-Spec) §6 enumerates the 45 binary acceptance criteria this codebase targets.
+**Post-v0.1 development** (continuing toward v0.2) adds three layers on top of the certified-clean v0.1 core:
+
+- **Constructor service** — an engineer-facing CLI under `flexo-rtm constructor` for authoring RDF interactively as engineering work happens, with atomic local commits and explicit push to a remote Flexo branch.
+- **Role-scoped Claude skills** — four catechisms (`.claude/skills/flexo-rtm-{engineer,reviewer,auditor,reconcile}.md`) wrap the CLI under a two-gate verbatim-reflection contract, inheriting the MVC pattern from [`flexo-rtm-research`](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/wiki/MVC-Pattern-from-RIME-TRL-ANT).
+- **User-acceptance walkthroughs** — versioned scripts at [`tests/acceptance/`](tests/acceptance/) for each skill role, designed to be driven live by a human + LLM through the ADCS reference arc. The first run produced [User Testing Experiment #1](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/wiki/User-Testing-Experiment-1) and surfaced six v0.2 vocabulary gaps (research-repo [#29–#34](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/issues?q=is%3Aissue+is%3Aopen+number%3A29..34)).
+
+The design is fully specified in the companion research repo: [`flexo-rtm-research`](https://github.com/dynamicalsystemsgroup/flexo-rtm-research). The canonical [Design Spec](https://github.com/dynamicalsystemsgroup/flexo-rtm-research/wiki/Design-Spec) §6 enumerates the 45 binary acceptance criteria this codebase targets; the open issues at [Open Issues — Research](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/wiki/Open-Issues---Research) + [Open Issues — Implementation](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/wiki/Open-Issues---Implementation) are the live status board for v0.2.
 
 ## Usage
 
@@ -36,6 +42,35 @@ uv run flexo-rtm certify -i my-model.ttl -s https://my.example/scope/X
 
 `flexo-rtm certify` emits an :class:`oracle.models.AuditReport` JSON document: per-dimension coverage stats, scope IRI, transcript IRI, reproducibility manifest IRI, and a `certified` boolean derived from the coverage thresholds. The exit code is 1 when `certified` is false, 0 otherwise — suitable for CI integration.
 
+### Constructor (engineer-facing authoring)
+
+```bash
+# Interactive RDF authoring against a local session
+uv run flexo-rtm constructor new-requirement \
+    https://rtm.example/req/REQ-001 --title "Pointing accuracy"
+
+uv run flexo-rtm constructor new-artifact \
+    https://rtm.example/art/proof-1 --title "Lyapunov proof" \
+    --content-hash sha256:abc... --git-commit deadbeef...
+
+uv run flexo-rtm constructor link \
+    --artifact https://rtm.example/art/proof-1 \
+    --requirement https://rtm.example/req/REQ-001
+
+# Interactive judgement-bearing signoff (adequacy / sufficiency / satisfaction)
+uv run flexo-rtm constructor attest \
+    --applies-to https://rtm.example/req/REQ-001 \
+    --class SatisfactionAttestation
+
+# Review pending session state + push atomically to a remote Flexo branch
+uv run flexo-rtm constructor status
+uv run flexo-rtm constructor push \
+    --url $FLEXO_URL --org my-org --repo my-repo --branch engineering/me \
+    --scope https://rtm.example/scope/adcs
+```
+
+The constructor commands enforce a **two-gate verbatim-reflection contract** when invoked through the role-scoped skills at [`.claude/skills/`](.claude/skills/): the user reviews proposed writes BEFORE they run and confirms what landed AFTER. See [`tests/acceptance/01-engineer-walkthrough.md`](tests/acceptance/01-engineer-walkthrough.md) for the canonical scripted walkthrough.
+
 ## Asymmetric audit semantics (vs OSLC)
 
 flexo-rtm's audit bar is strictly higher than OSLC's: we distinguish evidence (`rtm:addresses`) from judgment (`rtm:SatisfactionAttestation`). A graph that passes OSLC's traceability bar may fail a flexo-rtm audit because we flag missing explicit human attestations. **Roundtrips through OSLC are not identity** — exporting a flexo-rtm cert artifact to OSLC drops attestation structure (or carries it as opaque Layer C extensions that other OSLC clients can't interpret). flexo-rtm strictly *extends* OSLC; OSLC is a strict semantic subset. See [CLAUDE.md §Asymmetric audit semantics](CLAUDE.md) and [research-repo issue #15](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/issues/15).
@@ -59,10 +94,14 @@ flexo-rtm/
 ├── oracle/src/oracle/
 │   ├── models/                       # Pydantic surface (Design Spec §7.4)
 │   ├── canonicalize/                 # RDFC-1.0 + suite-derived hashing
-│   ├── operational/, storage/, analysis/, identity/, adapters/
-│   └── cli.py                        # Typer entry
+│   ├── constructor/                  # engineer-facing authoring CLI (post-v0.1)
+│   ├── storage/, analysis/, identity/, signing/, composition/, adapters/, uri/
+│   └── cli.py                        # Typer entry (certify, parsimony, constructor sub-app)
+├── .claude/skills/                   # 4 role-scoped catechisms (engineer/reviewer/auditor/reconcile)
 ├── examples/{adcs-corpus,oslc-fixtures}/
-└── tests/{unit,conformance,determinism,integration,regression,property}/
+└── tests/
+    ├── {unit,conformance,determinism,integration,regression,property}/   # automated (217 tests)
+    └── acceptance/                   # human-driven UAT walkthroughs (1 per skill role)
 ```
 
 ## Development
@@ -70,9 +109,11 @@ flexo-rtm/
 ```bash
 make test         # uv run pytest -q
 make parsimony    # build ontology/rtm.ttl + report triple count (≤2000)
-make lint         # ruff + mypy
+make lint         # ruff check + ruff format --check + mypy --strict (matches CI)
 make all          # parsimony + lint + test
 ```
+
+Pre-commit hooks (`.pre-commit-config.yaml`) chain the same ruff + ruff-format + mypy gates; install once with `uv run pre-commit install`.
 
 ## Working with SysMLv2 sources (openCAESAR is an external dependency)
 
