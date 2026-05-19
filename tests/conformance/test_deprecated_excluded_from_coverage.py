@@ -8,13 +8,12 @@ prov:wasInvalidatedBy triple is meaningful only if the audit side honors it.
 
 from __future__ import annotations
 
-from rdflib import Graph, Namespace, URIRef
-
 from oracle.composition.levels import (
     CertificationLevel,
     count_signers,
     scope_certification_level,
 )
+from rdflib import Graph, Namespace, URIRef
 
 RTM = Namespace("https://flexo-rtm.dev/ontology#")
 PROV = Namespace("http://www.w3.org/ns/prov#")

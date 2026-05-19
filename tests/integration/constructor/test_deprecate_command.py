@@ -5,11 +5,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from rdflib import PROV, RDFS, Dataset, Graph, Literal, URIRef
-from typer.testing import CliRunner
-
 from oracle.constructor.cli import constructor_app
 from oracle.storage.iri_scheme import PARTITION_GRAPHS
+from rdflib import PROV, RDFS, Dataset, Graph, Literal, URIRef
+from typer.testing import CliRunner
 
 runner = CliRunner()
 

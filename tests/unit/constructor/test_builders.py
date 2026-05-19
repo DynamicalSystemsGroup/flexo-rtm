@@ -12,9 +12,6 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 import pytest
-from rdflib import PROV, RDF, RDFS, Literal, Namespace, URIRef
-from rdflib.namespace import XSD
-
 from oracle.constructor.builders import (
     build_addresses_edge,
     build_artifact,
@@ -22,6 +19,8 @@ from oracle.constructor.builders import (
     build_deprecation,
     build_requirement,
 )
+from rdflib import PROV, RDF, RDFS, Literal, Namespace, URIRef
+from rdflib.namespace import XSD
 
 RTM = Namespace("https://flexo-rtm.dev/ontology#")
 

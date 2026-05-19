@@ -13,15 +13,14 @@ from pathlib import Path
 from uuid import uuid4
 
 import pytest
-from rdflib import RDF, Namespace, URIRef
-from typer.testing import CliRunner
-
 from oracle.constructor.cli import constructor_app
 from oracle.constructor.push import push_session
 from oracle.constructor.session import SessionContext
 from oracle.storage.flexo_client import FlexoConfig, FlexoHttpClient
 from oracle.storage.in_memory import InMemoryFlexoBackend
 from oracle.storage.iri_scheme import PARTITION_GRAPHS
+from rdflib import RDF, Namespace, URIRef
+from typer.testing import CliRunner
 
 RTM = Namespace("https://flexo-rtm.dev/ontology#")
 
@@ -97,9 +96,9 @@ def test_push_session_does_not_push_local_activity_log(tmp_path: Path) -> None:
     remote_audit = remote.read_graph("master", "urn:rtm:audit")
     prov_activity = URIRef("http://www.w3.org/ns/prov#Activity")
     activities = list(remote_audit.subjects(RDF.type, prov_activity))
-    assert (
-        len(activities) == 1
-    ), f"expected one push activity on remote, got {len(activities)}: {activities}"
+    assert len(activities) == 1, (
+        f"expected one push activity on remote, got {len(activities)}: {activities}"
+    )
 
 
 def test_push_session_empty_session_raises(tmp_path: Path) -> None:

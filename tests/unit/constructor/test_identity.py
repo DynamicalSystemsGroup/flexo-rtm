@@ -6,9 +6,8 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-from rdflib import URIRef
-
 from oracle.constructor.identity import IdentityError, resolve_engineer_iri
+from rdflib import URIRef
 
 
 def test_override_wins_when_provided() -> None:

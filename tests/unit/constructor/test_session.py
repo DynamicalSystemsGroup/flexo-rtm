@@ -6,11 +6,10 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-from rdflib import RDF, Graph, Namespace, URIRef
-
 from oracle.constructor.session import SessionContext, derive_session_id
 from oracle.storage.adapter import commit_atomic_batch
 from oracle.storage.iri_scheme import PARTITION_GRAPHS
+from rdflib import RDF, Graph, Namespace, URIRef
 
 RTM = Namespace("https://flexo-rtm.dev/ontology#")
 
