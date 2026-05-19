@@ -9,7 +9,8 @@ correctly.
 Slice 5 implements:
 - ``verify_content_hash`` with an injectable byte source (no network required
   for the offline test path).
-- ``check_git_commit_exists`` via ``git ls-remote`` subprocess.
+- ``check_git_commit_exists`` via ``git fetch --depth=1`` into a temporary
+  bare repo (protocol v2's commit-fetch capability).
 - ``check_oci_digest_exists`` via OCI Distribution Specification HTTPS GET.
 
 The git / OCI helpers always need network; tests covering them are marked
@@ -21,6 +22,7 @@ from __future__ import annotations
 
 import hashlib
 import subprocess
+import tempfile
 import urllib.request
 from dataclasses import dataclass
 
@@ -71,26 +73,52 @@ def verify_content_hash(recorded: str, *, payload: bytes) -> FetchResult:
 
 
 def check_git_commit_exists(*, repo: str, commit: str) -> FetchResult:
-    """Run ``git ls-remote <repo>`` and check whether the recorded commit is
-    in the output. Requires network and the ``git`` binary on PATH.
+    """Probe ``repo`` for ``commit`` via ``git fetch --depth=1 <repo> <commit>``.
+
+    Initializes a temporary bare repo and asks the remote to deliver exactly
+    the named commit (and nothing reachable from it beyond depth 1). Git
+    protocol v2 (default since git 2.26) supports fetching by commit SHA when
+    the server permits ``uploadpack.allowReachableSHA1InWant``; github.com and
+    gitlab.com enable it by default. Self-hosted servers without this setting
+    will report the commit as not found.
+
+    Returns :class:`FetchResult` with ``ok=True`` when the remote delivers the
+    commit, ``ok=False`` otherwise (network failure, server refusal, missing
+    git binary, or commit unreachable on the remote).
+
+    Requires network and the ``git`` binary on PATH.
     """
     try:
-        proc = subprocess.run(
-            ["git", "ls-remote", repo],
-            capture_output=True,
-            text=True,
-            timeout=30,
-            check=False,
-        )
+        with tempfile.TemporaryDirectory(prefix="flexo-rtm-git-probe-") as tmp:
+            init = subprocess.run(
+                ["git", "init", "--bare", "--quiet"],
+                cwd=tmp,
+                capture_output=True,
+                text=True,
+                timeout=10,
+                check=False,
+            )
+            if init.returncode != 0:
+                return FetchResult(
+                    ok=False,
+                    detail=f"git init failed: {init.stderr.strip()[:200]}",
+                )
+            proc = subprocess.run(
+                ["git", "fetch", "--quiet", "--depth=1", repo, commit],
+                cwd=tmp,
+                capture_output=True,
+                text=True,
+                timeout=30,
+                check=False,
+            )
     except (FileNotFoundError, subprocess.TimeoutExpired) as exc:
-        return FetchResult(ok=False, detail=f"git ls-remote failed: {exc}")
+        return FetchResult(ok=False, detail=f"git probe failed: {exc}")
     if proc.returncode != 0:
+        stderr = proc.stderr.strip()[:200] or "no error output"
         return FetchResult(
-            ok=False, detail=f"git ls-remote exit {proc.returncode}: {proc.stderr.strip()}"
+            ok=False, detail=f"commit {commit} not found on {repo}: {stderr}"
         )
-    if commit.lower() in proc.stdout.lower():
-        return FetchResult(ok=True, detail=f"commit found on remote: {commit}")
-    return FetchResult(ok=False, detail=f"commit {commit} not found on {repo}")
+    return FetchResult(ok=True, detail=f"commit {commit} reachable on {repo}")
 
 
 def check_oci_digest_exists(image_ref: str, *, accept_header: str | None = None) -> FetchResult:

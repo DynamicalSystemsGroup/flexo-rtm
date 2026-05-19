@@ -65,7 +65,6 @@ Two trackers. **Implementation/test work** lives in this repo. **Spec amendments
 
 ### Implementation backlog (`flexo-rtm`)
 
-- [#1](https://github.com/DynamicalSystemsGroup/flexo-rtm/issues/1) — Bug: `check_git_commit_exists` uses `git ls-remote` (refs only); fails for historical commits. Test [`test_known_commit_on_public_repo_resolves`](tests/integration/dereferenceable/test_git_commit_resolves.py) marked `@pytest.mark.xfail(strict=True)`.
 - [#3](https://github.com/DynamicalSystemsGroup/flexo-rtm/issues/3) — Implement chosen W3C VC-DI 2.0 conformance path. Blocked on research-repo [#27](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/issues/27) A/B/C decision. Test [`test_live_vc_di.py`](tests/integration/sign/test_live_vc_di.py) marked `@pytest.mark.xfail(strict=True)`.
 - [#4](https://github.com/DynamicalSystemsGroup/flexo-rtm/issues/4) — Add OSLC-RM/QM live interop test. Blocked on research-repo [#23](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/issues/23) test-point decision.
 - [#5](https://github.com/DynamicalSystemsGroup/flexo-rtm/issues/5) — Add openCAESAR end-to-end live test. Blocked on research-repo [#24](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/issues/24).
