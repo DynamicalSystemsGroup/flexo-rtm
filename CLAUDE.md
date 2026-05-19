@@ -4,7 +4,45 @@
 
 ## What this repo is
 
-The implementation of `flexo-rtm` — a verifiable self-certification oracle for bidirectional requirements traceability of SysMLv2 models. The design is finished and frozen in [`flexo-rtm-research`](/Users/z/Documents/GitHub/flexo-rtm-research). This repo is the code.
+The **implementation** of `flexo-rtm` — a verifiable self-certification oracle for bidirectional requirements traceability of SysMLv2 models. The companion [`flexo-rtm-research`](/Users/z/Documents/GitHub/flexo-rtm-research) holds principles, design spec, ADRs, normative contracts, and the research issue tracker. **Design lives there; code lives here.**
+
+## Double-loop architecture
+
+`flexo-rtm` development pairs two loops, one per repo, plus a coupling loop between them. This repo runs the **development loop**; the research repo runs the **research loop**; the coupling loop is what keeps them honest.
+
+```
+   RESEARCH LOOP                          DEVELOPMENT LOOP (this repo)
+   (flexo-rtm-research)
+   ─────────────────                      ─────────────────────────────
+   principles ─→ design spec ─→ ADRs ─→   spec ─→ code ─→ CI ─→ behavior
+                                                                  │
+                                                       (verification)
+                                                                  │
+   ←─── coupling loop ────────────────────────────────────────────┘
+   (observed behavior challenges assumptions; research issues filed; spec amends)
+```
+
+| Loop | Question | Repo | Activity |
+|---|---|---|---|
+| Research | "Are we building the right thing?" (**validation**) | `flexo-rtm-research` | Principles; design; ADRs; ontology choices |
+| Development (this one) | "Are we building it right?" (**verification**) | `flexo-rtm` | CLI; SHACL; tests; CI gates; observable behavior |
+| Coupling | "What did we learn that changes the question?" | both | Filing research-repo issues when implementation surfaces spec gaps |
+
+### Direction of information flow
+
+- **Research → here.** Spec changes and ADR decisions land in the research wiki. Work this repo needs to do is tracked as **impl-repo issues** (often cross-linked from a research-repo issue with `blocked-by`).
+- **Here → Research.** Behavior observed during integration tests, UAT walkthroughs, live-test sweeps, or just from coding that **doesn't match the spec's assumptions** must be escalated by **filing a research-repo issue**. Never silently work around a spec gap. Precedent: the slice-time divergences (filed during the v0.1 build as research-repo #11–#22) and the UAT-time divergences (research-repo #29–#34 from Experiment #1) are how this loop has fired so far.
+
+The discipline is the same the engineer skill enforces in its catechism: never paraphrase, never silently resolve, always file when in doubt.
+
+## Issue dashboards (the loop's status board)
+
+Both repos' open issues are mirrored to wiki pages in the research repo:
+
+- [**Open Issues — Research**](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/wiki/Open-Issues---Research) — what's pending in the spec/design side.
+- [**Open Issues — Implementation**](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/wiki/Open-Issues---Implementation) — what's pending in this repo.
+
+These auto-regenerate on every issue event in either repo (see `flexo-rtm-research/.github/workflows/sync-issues.yml`). When in doubt about whether work belongs here or in the research repo, check both dashboards first.
 
 ## Load-bearing documents
 
@@ -43,7 +81,7 @@ The reconcile skill's writes (under `~/.flexo-rtm/reconciliation/**`) are append
 
 **Sparseness:** minimum code per failing test; no abstractions for hypothetical future use; no reimplementing `rdflib` / `pyshacl` / `pydantic` / `cryptography` / `sigstore` / `in-toto-attestation`.
 
-**Escalation:** when the Design Spec and dev-time reality diverge — design principles in direct tension, sophisticated machinery would be required, an ADR's premise is falsified, or a spec'd SHACL / SPARQL fails on the regression corpus — **stop and escalate**, do not silently work around it.
+**Escalation:** when the Design Spec and dev-time reality diverge — design principles in direct tension, sophisticated machinery would be required, an ADR's premise is falsified, or a spec'd SHACL / SPARQL fails on the regression corpus — **stop and escalate**, do not silently work around it. Concretely: **file a research-repo issue** describing the gap (see [Open Issues — Research](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/wiki/Open-Issues---Research) for precedents — #11–#22 from the v0.1 build, #29–#34 from UAT Experiment #1). The coupling loop closes when the research-repo decision lands and a follow-up impl-repo issue captures the spec-aligned implementation work.
 
 **Deterministic:** no clocks, no randomness, no env-dependent ordering in oracle paths.
 
