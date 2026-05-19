@@ -6,6 +6,19 @@
 
 The **implementation** of `flexo-rtm` — a verifiable self-certification oracle for bidirectional requirements traceability of SysMLv2 models. The companion [`flexo-rtm-research`](/Users/z/Documents/GitHub/flexo-rtm-research) holds principles, design spec, ADRs, normative contracts, and the research issue tracker. **Design lives there; code lives here.**
 
+## Where to start (resuming cold)
+
+If you're picking up the project as a whole, **read [`flexo-rtm-research/CLAUDE.md`](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/blob/main/CLAUDE.md) first** — its "Where to start" section gives the canonical three-document path (research CLAUDE.md → wiki dashboards → User Testing Experiment 1) that reconstructs project state.
+
+If you're picking up **implementation work specifically**, also read these in order:
+
+1. **This file** — double-loop framing from the dev vantage point, plus skill routing + permission model + outstanding work pointers (the rest of this page).
+2. **[Open Issues — Implementation](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/wiki/Open-Issues---Implementation)** — what this repo has open. Each impl issue cross-references the research issue it's blocked on (or originates from).
+3. **[`tests/acceptance/01-engineer-walkthrough.md`](tests/acceptance/01-engineer-walkthrough.md)** — the canonical UAT walkthrough. Reading this teaches the CLI surface + the skill catechism shape in one pass. Other walkthroughs (reviewer / auditor / reconcile) follow the same shape.
+4. **[`README.md`](README.md)** — usage examples + repo layout. Quickest reference for the CLI surface.
+
+The plan file at `~/.claude/plans/harmonic-puzzling-patterson.md` is session-scoped and not load-bearing. The durable record is the four documents above.
+
 ## Double-loop architecture
 
 `flexo-rtm` development pairs two loops, one per repo, plus a coupling loop between them. This repo runs the **development loop**; the research repo runs the **research loop**; the coupling loop is what keeps them honest.
