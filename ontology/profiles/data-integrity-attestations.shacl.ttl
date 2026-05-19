@@ -1,0 +1,43 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# data-integrity-attestations profile — Signed Envelope Shapes §5 + S2.
+# Every rtm:Attestation MUST carry a sec:proof whose cryptosuite is one of the
+# recognized W3C VC-DI 2.0 suites.
+
+@prefix rtm: <https://flexo-rtm.dev/ontology#> .
+@prefix sec: <https://w3id.org/security#> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+rtm:DataIntegrityAttestationShape
+    a sh:NodeShape ;
+    sh:targetClass rtm:Attestation ;
+    sh:property [
+        sh:path sec:proof ;
+        sh:minCount 1 ;
+        sh:node rtm:DataIntegrityProofShape ;
+        sh:message "Attestation must carry a sec:proof (data-integrity-attestations profile)"
+    ] .
+
+rtm:DataIntegrityProofShape
+    a sh:NodeShape ;
+    sh:targetClass sec:DataIntegrityProof ;
+    sh:property [
+        sh:path sec:cryptosuite ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:in ("eddsa-rdfc-2022" "ecdsa-rdfc-2019" "ecdsa-rdfc-2019-p384") ;
+        sh:message "sec:cryptosuite must be one of the registered W3C VC-DI suites"
+    ] ;
+    sh:property [
+        sh:path sec:verificationMethod ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "sec:verificationMethod must be an IRI"
+    ] ;
+    sh:property [
+        sh:path sec:proofValue ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "sec:proofValue must be a string"
+    ] .

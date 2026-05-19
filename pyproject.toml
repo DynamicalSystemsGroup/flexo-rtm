@@ -17,6 +17,8 @@ dependencies = [
 
 [project.optional-dependencies]
 signing = ["cryptography>=42"]
+dsse = ["in-toto-attestation>=0.9", "securesystemslib>=0.32"]
+cosign = ["sigstore>=3.0"]
 analysis = ["owlrl>=6.0.2"]
 viz = ["matplotlib", "networkx", "graphviz"]
 
@@ -57,3 +59,7 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
 [tool.mypy]
 strict = true
 files = ["oracle/src", "ontology/parsimony/build.py"]
+
+[[tool.mypy.overrides]]
+module = ["sigstore.*", "in_toto_attestation.*"]
+ignore_missing_imports = true

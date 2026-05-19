@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# dsse-activities profile — Signed Envelope Shapes §6 + S3.
+# Every rtm:Activity that emits an attestation MUST reference a DSSE envelope.
+
+@prefix rtm: <https://flexo-rtm.dev/ontology#> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+
+rtm:DSSEActivityShape
+    a sh:NodeShape ;
+    sh:targetClass rtm:Activity ;
+    sh:property [
+        sh:path rtm:dsseEnvelope ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Activity must reference an rtm:dsseEnvelope IRI (dsse-activities profile)"
+    ] .

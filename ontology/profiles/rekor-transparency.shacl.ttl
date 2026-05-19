@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# rekor-transparency profile — Signed Envelope Shapes §8 + S5.
+# Every rtm:Attestation MUST cite a Rekor log entry IRI; the IRI pattern is
+# verified against the canonical Rekor endpoint format.
+
+@prefix rtm: <https://flexo-rtm.dev/ontology#> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+
+rtm:RekorTransparencyShape
+    a sh:NodeShape ;
+    sh:targetClass rtm:Attestation ;
+    sh:property [
+        sh:path rtm:rekorLogEntry ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:pattern "^https://rekor\\.[a-zA-Z0-9.-]+/api/v[0-9]+/log/entries/[a-zA-Z0-9]+$" ;
+        sh:message "Attestation must reference a Rekor log-entry IRI (rekor-transparency profile)"
+    ] .

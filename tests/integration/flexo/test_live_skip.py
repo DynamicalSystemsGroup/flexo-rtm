@@ -6,6 +6,7 @@ environment variable is set. In CI without ``FLEXO_TOKEN`` the conftest hook
 skips it; with ``FLEXO_TOKEN`` it would actually exercise the Flexo HTTPS
 client (which is not part of this file — slice 11 wires the live smoke test).
 """
+
 from __future__ import annotations
 
 import os

@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# W3C Security Vocabulary subset (hand-curated for slice 9). Terms enumerated
+# in manifest.yaml. Used by the data-integrity-attestations profile to attach
+# VC-DI proofs to rtm:Attestation instances (Signed Envelope Shapes §5).
+
+@prefix sec:  <https://w3id.org/security#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+sec:DataIntegrityProof a owl:Class ; rdfs:label "DataIntegrityProof (W3C VC-DI 2.0)" .
+
+sec:proof              a owl:ObjectProperty   ; rdfs:label "proof" .
+sec:cryptosuite        a owl:DatatypeProperty ; rdfs:label "cryptosuite (W3C VC-DI suite identifier)" .
+sec:verificationMethod a owl:ObjectProperty   ; rdfs:label "verificationMethod (public-key IRI)" .
+sec:proofPurpose       a owl:ObjectProperty   ; rdfs:label "proofPurpose" .
+sec:proofValue         a owl:DatatypeProperty ; rdfs:label "proofValue (base58btc signature)" .
+sec:created            a owl:DatatypeProperty ; rdfs:label "created (proof timestamp)" .
+
+sec:assertionMethod a owl:NamedIndividual ; rdfs:label "assertionMethod (proof purpose)" .

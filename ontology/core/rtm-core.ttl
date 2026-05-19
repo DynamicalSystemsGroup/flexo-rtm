@@ -122,6 +122,23 @@ rtm:hasQualifiedRole
     a owl:ObjectProperty ;
     rdfs:label "hasQualifiedRole (org → role; ADR-028 federated audit)" .
 
+# --- public-key declarations for signed-commits profile (Signed Envelope Shapes §4.2) ---
+
+rtm:hasPublicKey   a owl:ObjectProperty   ; rdfs:label "hasPublicKey (person → key resource)" .
+rtm:keyType        a owl:DatatypeProperty ; rdfs:label "keyType (openpgp / ssh-ed25519 / ssh-rsa / ssh-ecdsa / x509)" .
+rtm:keyFingerprint a owl:DatatypeProperty ; rdfs:label "keyFingerprint (algorithm-specific fingerprint)" .
+
+# --- signed-commits binding (S1, Signed Envelope Shapes §4) ------------------
+
+rtm:introducedByCommit a owl:ObjectProperty   ; rdfs:label "introducedByCommit (attestation → git commit IRI that introduced it)" .
+rtm:signedByKey        a owl:DatatypeProperty ; rdfs:label "signedByKey (commit's signature key fingerprint)" .
+
+# --- envelope IRIs (S3, S4, S5) ---------------------------------------------
+
+rtm:dsseEnvelope  a owl:ObjectProperty ; rdfs:label "dsseEnvelope (activity → DSSE-enveloped in-toto attestation IRI)" .
+rtm:cosignBundle  a owl:ObjectProperty ; rdfs:label "cosignBundle (activity → cosign bundle IRI)" .
+rtm:rekorLogEntry a owl:ObjectProperty ; rdfs:label "rekorLogEntry (attestation → Rekor transparency-log entry IRI)" .
+
 # --- policy projection (Identity Adapter Contract §3.4 + §5) ----------------
 
 rtm:Policy

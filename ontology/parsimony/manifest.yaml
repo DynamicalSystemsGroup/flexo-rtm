@@ -174,3 +174,20 @@ vocabularies:
       - { iri: "omg-sysml:verifies",      purpose: "SysMLv2 verifies edge → rtm:addresses (slice-3 precedent applied)" }
       - { iri: "omg-sysml:requirement",   purpose: "annotation property; subPropertyOf rtm:hasRequirement" }
       - { iri: "omg-sysml:assumes",       purpose: "assumption annotation (preserved as-is)" }
+
+  - name: W3C Security
+    iri: "https://w3id.org/security#"
+    source_file: ontology/imports/sec.ttl
+    extract_method: hand-curated
+    target_extract_file: parsimony/extracts/sec-subset.ttl
+    extracted_classes:
+      - { iri: "sec:DataIntegrityProof", purpose: "VC-DI 2.0 proof object on rtm:Attestation" }
+    extracted_properties:
+      - { iri: "sec:proof",              purpose: "attestation → DataIntegrityProof" }
+      - { iri: "sec:cryptosuite",        purpose: "cryptosuite identifier (W3C VC-DI / cosign / DSSE)" }
+      - { iri: "sec:verificationMethod", purpose: "public-key IRI" }
+      - { iri: "sec:proofPurpose",       purpose: "purpose enum (assertionMethod for attestations)" }
+      - { iri: "sec:proofValue",         purpose: "base58btc signature bytes" }
+      - { iri: "sec:created",            purpose: "proof timestamp" }
+    extracted_individuals:
+      - { iri: "sec:assertionMethod",    purpose: "proof purpose individual (attestation assertion)" }

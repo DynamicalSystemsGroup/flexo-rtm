@@ -12,7 +12,7 @@ from tests.conftest import REPO_ROOT
 
 PYPROJECT: Path = REPO_ROOT / "pyproject.toml"
 
-ALLOWED_OPTIONAL_EXTRAS = {"signing", "analysis", "viz"}
+ALLOWED_OPTIONAL_EXTRAS = {"signing", "dsse", "cosign", "analysis", "viz"}
 
 
 def test_no_non_pypi_default_deps() -> None:

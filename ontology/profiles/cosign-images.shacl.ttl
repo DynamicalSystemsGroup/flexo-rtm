@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# cosign-images profile — Signed Envelope Shapes §7 + S4.
+# Every rtm:hasOCIImage on an activity MUST be paired with an rtm:cosignBundle.
+
+@prefix rtm: <https://flexo-rtm.dev/ontology#> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+
+rtm:CosignImagesShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf rtm:hasOCIImage ;
+    sh:sparql [
+        sh:message "Every rtm:hasOCIImage subject must also carry an rtm:cosignBundle (cosign-images profile)" ;
+        sh:select """
+            PREFIX rtm: <https://flexo-rtm.dev/ontology#>
+            SELECT $this WHERE {
+                $this rtm:hasOCIImage ?image .
+                FILTER NOT EXISTS { $this rtm:cosignBundle ?bundle }
+            }
+        """
+    ] .

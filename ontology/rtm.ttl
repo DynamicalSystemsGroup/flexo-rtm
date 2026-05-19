@@ -9,6 +9,7 @@
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix rtm: <https://flexo-rtm.dev/ontology#> .
+@prefix sec: <https://w3id.org/security#> .
 
 oslc_qm:TestCase a owl:Class ;
     rdfs:label "TestCase (test-as-evidence)" ;
@@ -283,11 +284,17 @@ rtm:contentHashes a owl:ObjectProperty ;
     rdfs:label "contentHashes (list of manifest entries)" ;
     rdfs:domain rtm:ReproducibilityManifest .
 
+rtm:cosignBundle a owl:ObjectProperty ;
+    rdfs:label "cosignBundle (activity → cosign bundle IRI)" .
+
 rtm:deferred a rtm:AttestationStatus ;
     rdfs:label "deferred" .
 
 rtm:deprecated a rtm:AttestationStatus ;
     rdfs:label "deprecated" .
+
+rtm:dsseEnvelope a owl:ObjectProperty ;
+    rdfs:label "dsseEnvelope (activity → DSSE-enveloped in-toto attestation IRI)" .
 
 rtm:extends a owl:ObjectProperty ;
     rdfs:label "extends" ;
@@ -327,6 +334,9 @@ rtm:hasGitRepo a owl:DatatypeProperty ;
 rtm:hasOCIImage a owl:DatatypeProperty ;
     rdfs:label "hasOCIImage (registry/image@algo:digest)" .
 
+rtm:hasPublicKey a owl:ObjectProperty ;
+    rdfs:label "hasPublicKey (person → key resource)" .
+
 rtm:hasQualifiedRole a owl:ObjectProperty ;
     rdfs:label "hasQualifiedRole (org → role; ADR-028 federated audit)" .
 
@@ -342,6 +352,15 @@ rtm:intersectsWith a owl:ObjectProperty ;
     rdfs:label "intersectsWith" ;
     rdfs:domain rtm:Scope ;
     rdfs:range rtm:Scope .
+
+rtm:introducedByCommit a owl:ObjectProperty ;
+    rdfs:label "introducedByCommit (attestation → git commit IRI that introduced it)" .
+
+rtm:keyFingerprint a owl:DatatypeProperty ;
+    rdfs:label "keyFingerprint (algorithm-specific fingerprint)" .
+
+rtm:keyType a owl:DatatypeProperty ;
+    rdfs:label "keyType (openpgp / ssh-ed25519 / ssh-rsa / ssh-ecdsa / x509)" .
 
 rtm:ociImages a owl:ObjectProperty ;
     rdfs:label "ociImages (list of manifest entries)" ;
@@ -371,6 +390,9 @@ rtm:permitsAttestationType a owl:ObjectProperty ;
 rtm:referencedBy a owl:ObjectProperty ;
     rdfs:label "referencedBy (manifest entry → resources that cite this URI)" .
 
+rtm:rekorLogEntry a owl:ObjectProperty ;
+    rdfs:label "rekorLogEntry (attestation → Rekor transparency-log entry IRI)" .
+
 rtm:requiresAttribute a owl:ObjectProperty ;
     rdfs:label "requiresAttribute" ;
     rdfs:domain rtm:Policy .
@@ -382,6 +404,9 @@ rtm:scopeFilter a owl:DatatypeProperty ;
 rtm:scopedTo a owl:ObjectProperty ;
     rdfs:label "scopedTo" ;
     rdfs:range rtm:Scope .
+
+rtm:signedByKey a owl:DatatypeProperty ;
+    rdfs:label "signedByKey (commit's signature key fingerprint)" .
 
 rtm:status a owl:ObjectProperty ;
     rdfs:label "status (pass | fail | deferred | deprecated)" ;
@@ -416,6 +441,30 @@ rtm:writesScope a owl:ObjectProperty ;
     rdfs:label "writesScope (commit Activity → scope IRI; round-trip per F4)" ;
     rdfs:domain prov:Activity ;
     rdfs:range rtm:Scope .
+
+sec:DataIntegrityProof a owl:Class ;
+    rdfs:label "DataIntegrityProof (W3C VC-DI 2.0)" .
+
+sec:assertionMethod a owl:NamedIndividual ;
+    rdfs:label "assertionMethod (proof purpose)" .
+
+sec:created a owl:DatatypeProperty ;
+    rdfs:label "created (proof timestamp)" .
+
+sec:cryptosuite a owl:DatatypeProperty ;
+    rdfs:label "cryptosuite (W3C VC-DI suite identifier)" .
+
+sec:proof a owl:ObjectProperty ;
+    rdfs:label "proof" .
+
+sec:proofPurpose a owl:ObjectProperty ;
+    rdfs:label "proofPurpose" .
+
+sec:proofValue a owl:DatatypeProperty ;
+    rdfs:label "proofValue (base58btc signature)" .
+
+sec:verificationMethod a owl:ObjectProperty ;
+    rdfs:label "verificationMethod (public-key IRI)" .
 
 omg-sysml:Action a owl:Class ;
     rdfs:label "Action (SysMLv2-native activity)" ;
