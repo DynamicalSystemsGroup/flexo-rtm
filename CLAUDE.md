@@ -35,7 +35,7 @@ The implementation of `flexo-rtm` — a verifiable self-certification oracle for
 | 4 | Identity adapters + policy SHACL | I1–I6, I8 |
 | 5 | External URI refs + reproducibility manifest | U1, U2, U5; U3+U4 network-marked; partial U6 |
 | 6 | OSLC-RM/QM source-preserving adapter | O1–O7 |
-| 7 | SysMLv2 read ingestion | §3 + SysMLv2-anchored profile |
+| 7 | SysMLv2 read + per-file RDF write-back | §3 + SysMLv2-anchored profile + roundtrip |
 
 Next: slice 8 (Flexo storage adapter, F1–F7).
 
@@ -65,6 +65,7 @@ Track inconsistencies between this repo and the canonical research repo. Each en
 - **OSLC `satisfies` / `validatesRequirement` mapping (slice-3 precedent applied)** ([#14](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/issues/14)). [`OSLC Roundtrip Acceptance`](/Users/z/Documents/GitHub/flexo-rtm-research/wiki/OSLC Roundtrip Acceptance.md) §4.2 and §5.2 still map `oslc_rm:satisfies` and `oslc_qm:validatesRequirement` to `rtm:satisfies`. After the slice-3 rename, both map to `rtm:addresses` instead (recorded in [`oracle/adapters/oslc/{rm,qm}.py`](oracle/src/oracle/adapters/oslc/) and the corresponding extracts).
 - **SysMLv2 `omg-sysml:satisfies` / `omg-sysml:verifies` mapping (slice-3 precedent applied)** ([#16](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/issues/16)). [`SysMLv2 Ingestion Contract`](/Users/z/Documents/GitHub/flexo-rtm-research/wiki/SysMLv2 Ingestion Contract.md) §5.1 maps `omg-sysml:satisfies` to `rtm:satisfies` and `omg-sysml:verifies` to `rtm:verifies`. Both are evidence-linkage edges and should map to `rtm:addresses`; the SysMLv2 design-time vs verification-time distinction is preserved in the source graph. Recorded in [`oracle/adapters/sysmlv2/mapping.py`](oracle/src/oracle/adapters/sysmlv2/mapping.py).
 - **SysMLv2 contract uses `rtm:subject` instead of `rtm:appliesTo`** ([#17](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/issues/17)). §8.2 references `rtm:subject` for the attestation-subject pointer; slice 4 standardized on `rtm:appliesTo` per the policy SPARQL in Identity Adapter Contract §5. The ontology declares only `rtm:appliesTo`.
+- **SysMLv2 write-back pulled into v0.1** ([#18](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/issues/18)). [`SysMLv2 Ingestion Contract`](/Users/z/Documents/GitHub/flexo-rtm-research/wiki/SysMLv2 Ingestion Contract.md) §9 defers write-back to v0.2. After implementing slice 7's read path, we pulled per-file RDF write-back into v0.1 because the same-format roundtrip test (`parse → emit → parse → canonical-equality`) is the read step's correctness proof — without it, `parse()` could silently lose triples and the audit would still "pass" on the diminished graph. Per-format JSON emission stays out of scope (openCAESAR's job, symmetric to ingest).
 
 ## Style
 

@@ -21,6 +21,7 @@ from oracle.adapters.sysmlv2.core import (
     SYSMLV2_NAMESPACE,
     canonical_triple_set,
     emit_sysmlv2,
+    list_source_files,
     parse_sysmlv2,
     source_graph_iri_for_path,
 )
@@ -36,6 +37,7 @@ __all__ = [
     "SYSMLV2_NAMESPACE",
     "canonical_triple_set",
     "emit_sysmlv2",
+    "list_source_files",
     "parse_sysmlv2",
     "source_graph_iri_for_path",
 ]
