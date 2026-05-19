@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# Vendor extension registry per OSLC Roundtrip Acceptance §6.2.
+# Diagnostic only: does not affect roundtrip behavior. Any vendor whose
+# namespace is NOT in {oslc_rm:, oslc_qm:, oslc:, dcterms:, rdf:, rdfs:,
+# owl:, xsd:} is carried through under Layer C regardless of registration.
+# Adding a vendor is a YAML edit only; no code changes.
+
+vendors:
+  - name: IBM-Doors-Next
+    namespace_prefix: rm_rm
+    namespace_uri: "http://jazz.net/ns/rm/dng/rm#"
+    handling: carry-through
+    notes: |
+      Doors Next Generation custom attributes appear under this namespace.
+      flexo-rtm carries them verbatim; no semantic interpretation.
+
+  - name: Jama-Connect
+    namespace_prefix: jama
+    namespace_uri: "https://api.jamasoftware.com/oslc/2.0/"
+    handling: carry-through
+    notes: |
+      Jama custom item types and field extensions.
+
+  - name: Polarion
+    namespace_prefix: polarion
+    namespace_uri: "http://www.polarion.com/2010/oslc-rm#"
+    handling: carry-through
+    notes: |
+      Polarion ALM custom fields.

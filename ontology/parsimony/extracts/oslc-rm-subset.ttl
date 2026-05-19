@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# OSLC-RM 2.1 subset (hand-curated for slice 6). Terms enumerated in
+# manifest.yaml; mapping to rtm:* per OSLC Roundtrip Acceptance §4.
+
+@prefix oslc_rm: <http://open-services.net/ns/rm#> .
+@prefix rtm:     <https://flexo-rtm.dev/ontology#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+
+oslc_rm:Requirement
+    a owl:Class ;
+    owl:equivalentClass rtm:Requirement ;
+    rdfs:label "Requirement" .
+
+oslc_rm:RequirementCollection
+    a owl:Class ;
+    rdfs:subClassOf oslc_rm:Requirement ;
+    rdfs:label "RequirementCollection" .
+
+# Link types — each row is owl:equivalentProperty with the rtm:* peer.
+# Note: oslc_rm:satisfies maps to rtm:addresses per the slice-3 epistemic
+# rename (satisfaction is strictly attestation; the OSLC edge is evidence
+# linkage, i.e. addressing).
+
+oslc_rm:elaboratedBy a owl:ObjectProperty ; rdfs:label "elaboratedBy" .
+oslc_rm:elaborates   a owl:ObjectProperty ; rdfs:label "elaborates" .
+oslc_rm:specifiedBy  a owl:ObjectProperty ; rdfs:label "specifiedBy" .
+oslc_rm:specifies    a owl:ObjectProperty ; rdfs:label "specifies" .
+oslc_rm:satisfiedBy  a owl:ObjectProperty ; rdfs:label "satisfiedBy" .
+oslc_rm:satisfies    a owl:ObjectProperty ; owl:equivalentProperty rtm:addresses ; rdfs:label "satisfies (OSLC-RM verification edge; maps to rtm:addresses)" .
+oslc_rm:tracedTo     a owl:ObjectProperty ; rdfs:label "tracedTo" .
+oslc_rm:affectedBy   a owl:ObjectProperty ; rdfs:label "affectedBy" .
+oslc_rm:constrainedBy a owl:ObjectProperty ; rdfs:label "constrainedBy" .
+oslc_rm:constrains   a owl:ObjectProperty ; rdfs:label "constrains" .
+oslc_rm:decomposedBy a owl:ObjectProperty ; rdfs:label "decomposedBy" .
+oslc_rm:decomposes   a owl:ObjectProperty ; rdfs:label "decomposes" .
+oslc_rm:implementedBy a owl:ObjectProperty ; rdfs:label "implementedBy" .
+oslc_rm:trackedBy    a owl:ObjectProperty ; rdfs:label "trackedBy" .
+oslc_rm:validatedBy  a owl:ObjectProperty ; rdfs:label "validatedBy" .

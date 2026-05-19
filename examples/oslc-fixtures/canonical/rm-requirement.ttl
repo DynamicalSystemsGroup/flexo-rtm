@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# Canonical OSLC-RM 2.1 Requirement fixture. Exercises the Requirement class
+# plus dcterms metadata and one outgoing satisfies-edge.
+
+@prefix oslc_rm: <http://open-services.net/ns/rm#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+<https://rtm.example/oslc-rm/req/REQ-1>
+    a oslc_rm:Requirement ;
+    dcterms:identifier "REQ-1" ;
+    dcterms:title "Spacecraft shall maintain 0.1° pointing accuracy" ;
+    dcterms:description "Pointing-accuracy requirement for the ADCS subsystem." ;
+    dcterms:created "2026-01-15T00:00:00Z"^^xsd:dateTime ;
+    oslc_rm:satisfiedBy <https://rtm.example/oslc-rm/art/EV-PROOF-REQ-1> ;
+    oslc_rm:elaboratedBy <https://rtm.example/oslc-rm/req/REQ-1.1> .
+
+<https://rtm.example/oslc-rm/art/EV-PROOF-REQ-1>
+    a oslc_rm:Requirement ;
+    dcterms:identifier "EV-PROOF-REQ-1" ;
+    dcterms:title "Stability proof for REQ-1" ;
+    oslc_rm:satisfies <https://rtm.example/oslc-rm/req/REQ-1> .

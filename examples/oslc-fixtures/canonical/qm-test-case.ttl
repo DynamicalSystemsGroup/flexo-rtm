@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# Canonical OSLC-QM 2.1 TestCase fixture.
+
+@prefix oslc_qm: <http://open-services.net/ns/qm#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://rtm.example/oslc-qm/test/TC-1>
+    a oslc_qm:TestCase ;
+    dcterms:identifier "TC-1" ;
+    dcterms:title "Pointing-accuracy verification test case" ;
+    oslc_qm:validatesRequirement <https://rtm.example/oslc-rm/req/REQ-1> .

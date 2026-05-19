@@ -97,6 +97,57 @@ vocabularies:
       - { iri: "dcat:Distribution", purpose: "optional: adopters who describe download distributions" }
     extracted_properties:
       - { iri: "dcat:downloadURL", purpose: "optional fetch URL for rtm:Artifact (External URI Rules §3.6)" }
-  - { name: OSLC-RM,      iri: "http://open-services.net/ns/rm#",                                 source_file: ontology/imports/oslc-rm.ttl,         extract_method: SPARQL_CONSTRUCT, extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
-  - { name: OSLC-QM,      iri: "http://open-services.net/ns/qm#",                                 source_file: ontology/imports/oslc-qm.ttl,         extract_method: SPARQL_CONSTRUCT, extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
+  - name: OSLC-RM
+    iri: "http://open-services.net/ns/rm#"
+    source_file: ontology/imports/oslc-rm.ttl
+    extract_method: hand-curated
+    target_extract_file: parsimony/extracts/oslc-rm-subset.ttl
+    extracted_classes:
+      - { iri: "oslc_rm:Requirement",           purpose: "owl:equivalentClass rtm:Requirement (§4.1)" }
+      - { iri: "oslc_rm:RequirementCollection", purpose: "subClass of oslc_rm:Requirement" }
+    extracted_properties:
+      - { iri: "oslc_rm:elaboratedBy",  purpose: "RM link type" }
+      - { iri: "oslc_rm:elaborates",    purpose: "RM link type (inverse)" }
+      - { iri: "oslc_rm:specifiedBy",   purpose: "RM link type" }
+      - { iri: "oslc_rm:specifies",     purpose: "RM link type (inverse)" }
+      - { iri: "oslc_rm:satisfiedBy",   purpose: "RM link type" }
+      - { iri: "oslc_rm:satisfies",     purpose: "RM verification edge → rtm:addresses (epistemic rename per slice 3)" }
+      - { iri: "oslc_rm:tracedTo",      purpose: "RM link type; weaker than satisfies" }
+      - { iri: "oslc_rm:affectedBy",    purpose: "RM link type" }
+      - { iri: "oslc_rm:constrainedBy", purpose: "RM link type" }
+      - { iri: "oslc_rm:constrains",    purpose: "RM link type (inverse)" }
+      - { iri: "oslc_rm:decomposedBy",  purpose: "RM link type" }
+      - { iri: "oslc_rm:decomposes",    purpose: "RM link type (inverse)" }
+      - { iri: "oslc_rm:implementedBy", purpose: "RM link type" }
+      - { iri: "oslc_rm:trackedBy",     purpose: "RM link type" }
+      - { iri: "oslc_rm:validatedBy",   purpose: "RM → QM TestCase link" }
+
+  - name: OSLC-QM
+    iri: "http://open-services.net/ns/qm#"
+    source_file: ontology/imports/oslc-qm.ttl
+    extract_method: hand-curated
+    target_extract_file: parsimony/extracts/oslc-qm-subset.ttl
+    extracted_classes:
+      - { iri: "oslc_qm:TestPlan",            purpose: "QM root" }
+      - { iri: "oslc_qm:TestCase",            purpose: "subClass of rtm:Artifact" }
+      - { iri: "oslc_qm:TestScript",          purpose: "subClass of rtm:Artifact" }
+      - { iri: "oslc_qm:TestExecutionRecord", purpose: "subClass of rtm:Activity" }
+      - { iri: "oslc_qm:TestResult",          purpose: "subClass of rtm:Artifact" }
+    extracted_properties:
+      - { iri: "oslc_qm:usesTestCase",                  purpose: "QM link type" }
+      - { iri: "oslc_qm:executesTestScript",            purpose: "QM link type" }
+      - { iri: "oslc_qm:producedByTestExecutionRecord", purpose: "QM link type" }
+      - { iri: "oslc_qm:reportsOnTestCase",             purpose: "QM link type" }
+      - { iri: "oslc_qm:reportsOnTestPlan",             purpose: "QM link type" }
+      - { iri: "oslc_qm:runsTestCase",                  purpose: "QM link type" }
+      - { iri: "oslc_qm:runsOnTestEnvironment",         purpose: "QM link type" }
+      - { iri: "oslc_qm:validatesRequirement",          purpose: "QM → RM (cross-domain) → rtm:addresses" }
+      - { iri: "oslc_qm:blocksTestExecutionRecord",     purpose: "QM link type" }
+      - { iri: "oslc_qm:relatedChangeRequest",          purpose: "QM link type" }
+    extracted_individuals:
+      - { iri: "oslc_qm:passed",       purpose: "→ rtm:status/pass" }
+      - { iri: "oslc_qm:failed",       purpose: "→ rtm:status/fail" }
+      - { iri: "oslc_qm:inconclusive", purpose: "→ rtm:status/deferred" }
+      - { iri: "oslc_qm:error",        purpose: "→ rtm:status/fail" }
+      - { iri: "oslc_qm:blocked",      purpose: "→ rtm:status/deferred" }
   - { name: omg-sysml,    iri: "https://www.omg.org/spec/SysML/20240801/SysML#",                  source_file: ontology/imports/omg-sysml-v1.ttl,    extract_method: SLME,             extracted_classes: [], extracted_properties: [], extracted_individuals: [] }

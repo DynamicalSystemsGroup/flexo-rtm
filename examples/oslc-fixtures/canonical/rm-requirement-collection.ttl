@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# Canonical OSLC-RM 2.1 RequirementCollection fixture.
+
+@prefix oslc_rm: <http://open-services.net/ns/rm#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://rtm.example/oslc-rm/collection/adcs-baseline>
+    a oslc_rm:RequirementCollection ;
+    dcterms:identifier "adcs-baseline" ;
+    dcterms:title "ADCS baseline requirements" ;
+    oslc_rm:decomposes <https://rtm.example/oslc-rm/req/REQ-1> ,
+                       <https://rtm.example/oslc-rm/req/REQ-2> .

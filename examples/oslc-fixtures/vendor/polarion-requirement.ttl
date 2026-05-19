@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# Polarion ALM sanitized sample. Vendor extensions under the polarion: namespace.
+
+@prefix oslc_rm: <http://open-services.net/ns/rm#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix polarion: <http://www.polarion.com/2010/oslc-rm#> .
+
+<https://polarion.example.com/polarion/oslc/ADCS-7777>
+    a oslc_rm:Requirement ;
+    dcterms:identifier "ADCS-7777" ;
+    dcterms:title "Polarion-imported requirement for vendor carry-through" ;
+    polarion:workItemType "systemRequirement" ;
+    polarion:priority "high" ;
+    polarion:severity "medium" .

@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# Canonical OSLC-QM 2.1 TestExecutionRecord + TestResult fixture, including
+# the producedByTestExecutionRecord link and a verdict.
+
+@prefix oslc_qm: <http://open-services.net/ns/qm#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+<https://rtm.example/oslc-qm/exec/TER-1>
+    a oslc_qm:TestExecutionRecord ;
+    dcterms:identifier "TER-1" ;
+    dcterms:title "Pointing-accuracy test execution, 2026-04-08" ;
+    dcterms:created "2026-04-08T03:00:28Z"^^xsd:dateTime ;
+    oslc_qm:runsTestCase <https://rtm.example/oslc-qm/test/TC-1> .
+
+<https://rtm.example/oslc-qm/result/TR-1>
+    a oslc_qm:TestResult ;
+    dcterms:identifier "TR-1" ;
+    dcterms:title "Pointing-accuracy test result, 2026-04-08" ;
+    oslc_qm:producedByTestExecutionRecord <https://rtm.example/oslc-qm/exec/TER-1> ;
+    oslc_qm:reportsOnTestCase <https://rtm.example/oslc-qm/test/TC-1> ;
+    oslc_qm:validatesRequirement <https://rtm.example/oslc-rm/req/REQ-1> ;
+    dcterms:relation oslc_qm:passed .

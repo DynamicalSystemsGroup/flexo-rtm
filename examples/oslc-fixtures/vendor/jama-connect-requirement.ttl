@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# Jama Connect sanitized sample. Vendor extensions under the jama: namespace.
+
+@prefix oslc_rm: <http://open-services.net/ns/rm#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix jama:    <https://api.jamasoftware.com/oslc/2.0/> .
+
+<https://jama.example.com/projects/ADCS/items/8888>
+    a oslc_rm:Requirement ;
+    dcterms:identifier "JAMA-8888" ;
+    dcterms:title "Jama-imported requirement for vendor carry-through" ;
+    jama:projectKey "ADCS" ;
+    jama:globalId "GID-12345" ;
+    jama:itemType "Functional Requirement" .

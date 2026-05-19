@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# IBM Doors Next sanitized sample. The rm_rm: namespace carries vendor-specific
+# attributes; flexo-rtm preserves them verbatim under Layer C.
+
+@prefix oslc_rm: <http://open-services.net/ns/rm#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rm_rm:   <http://jazz.net/ns/rm/dng/rm#> .
+
+<https://doors.example.com/rm/resources/REQ-9001>
+    a oslc_rm:Requirement ;
+    dcterms:identifier "REQ-9001" ;
+    dcterms:title "Doors-imported requirement for vendor carry-through" ;
+    rm_rm:projectArea <https://doors.example.com/rm/process/project-areas/ADCS> ;
+    rm_rm:dngArtifactNumber "9001" ;
+    rm_rm:reviewState "approved" .

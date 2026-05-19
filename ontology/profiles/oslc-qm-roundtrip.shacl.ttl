@@ -1,0 +1,28 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# OSLC-QM roundtrip profile — OSLC Roundtrip Acceptance §9.
+
+@prefix oslc_qm: <http://open-services.net/ns/qm#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+
+[] a sh:NodeShape ;
+    sh:targetClass oslc_qm:TestCase ;
+    sh:property [
+        sh:path dcterms:identifier ;
+        sh:minCount 1 ;
+        sh:message "OSLC-QM TestCase must carry dcterms:identifier"
+    ] ;
+    sh:property [
+        sh:path dcterms:title ;
+        sh:minCount 1 ;
+        sh:message "OSLC-QM TestCase must carry dcterms:title"
+    ] .
+
+[] a sh:NodeShape ;
+    sh:targetClass oslc_qm:TestResult ;
+    sh:property [
+        sh:path dcterms:identifier ;
+        sh:minCount 1 ;
+        sh:message "OSLC-QM TestResult must carry dcterms:identifier"
+    ] .

@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# OSLC-QM 2.1 subset (hand-curated for slice 6). Terms enumerated in
+# manifest.yaml; mapping to rtm:* per OSLC Roundtrip Acceptance §5.
+
+@prefix oslc_qm: <http://open-services.net/ns/qm#> .
+@prefix rtm:     <https://flexo-rtm.dev/ontology#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+
+oslc_qm:TestPlan             a owl:Class ; rdfs:label "TestPlan" .
+oslc_qm:TestCase             a owl:Class ; rdfs:subClassOf rtm:Artifact ; rdfs:label "TestCase (test-as-evidence)" .
+oslc_qm:TestScript           a owl:Class ; rdfs:subClassOf rtm:Artifact ; rdfs:label "TestScript" .
+oslc_qm:TestExecutionRecord  a owl:Class ; rdfs:subClassOf rtm:Activity ; rdfs:label "TestExecutionRecord (execution-as-activity)" .
+oslc_qm:TestResult           a owl:Class ; rdfs:subClassOf rtm:Artifact ; rdfs:label "TestResult (result-as-evidence)" .
+
+oslc_qm:usesTestCase                  a owl:ObjectProperty ; rdfs:label "usesTestCase" .
+oslc_qm:executesTestScript            a owl:ObjectProperty ; rdfs:label "executesTestScript" .
+oslc_qm:producedByTestExecutionRecord a owl:ObjectProperty ; rdfs:label "producedByTestExecutionRecord" .
+oslc_qm:reportsOnTestCase             a owl:ObjectProperty ; rdfs:label "reportsOnTestCase" .
+oslc_qm:reportsOnTestPlan             a owl:ObjectProperty ; rdfs:label "reportsOnTestPlan" .
+oslc_qm:runsTestCase                  a owl:ObjectProperty ; rdfs:label "runsTestCase" .
+oslc_qm:runsOnTestEnvironment         a owl:ObjectProperty ; rdfs:label "runsOnTestEnvironment" .
+oslc_qm:validatesRequirement          a owl:ObjectProperty ; owl:equivalentProperty rtm:addresses ; rdfs:label "validatesRequirement (cross-domain: TestResult → Requirement; maps to rtm:addresses)" .
+oslc_qm:blocksTestExecutionRecord     a owl:ObjectProperty ; rdfs:label "blocksTestExecutionRecord" .
+oslc_qm:relatedChangeRequest          a owl:ObjectProperty ; rdfs:label "relatedChangeRequest" .
+
+# Verdict individuals (OSLC-QM verdict → rtm:status mapping per §5.3 of contract).
+oslc_qm:passed       a oslc_qm:TestResult ; rdfs:label "passed" .
+oslc_qm:failed       a oslc_qm:TestResult ; rdfs:label "failed" .
+oslc_qm:inconclusive a oslc_qm:TestResult ; rdfs:label "inconclusive" .
+oslc_qm:error        a oslc_qm:TestResult ; rdfs:label "error" .
+oslc_qm:blocked      a oslc_qm:TestResult ; rdfs:label "blocked" .
