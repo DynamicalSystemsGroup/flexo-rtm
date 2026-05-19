@@ -52,10 +52,16 @@ def is_main_branch(branch: str) -> bool:
 
 
 def is_valid_branch_name(branch: str) -> bool:
-    """Branch matches the §6 patterns: main, engineering/{team}, or cert/{run-id}."""
+    """Branch matches the §6 patterns: main, engineering/{team}, or cert/{run-id}.
+
+    Also accepts ``master`` as the Flexo MMS Layer-1 historical default branch
+    (which the live service auto-creates on repo PUT). Tracked upstream as
+    flexo-rtm-research#21 — the contract §6 should explicitly admit ``master``
+    or rename the auto-created branch to ``main``.
+    """
     if not _BRANCH_NAME_RE.match(branch):
         return False
-    if is_main_branch(branch):
+    if is_main_branch(branch) or branch == "master":
         return True
     return branch.startswith(ENGINEERING_BRANCH_PREFIX) or branch.startswith(CERT_BRANCH_PREFIX)
 
