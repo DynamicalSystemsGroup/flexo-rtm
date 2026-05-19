@@ -146,6 +146,28 @@ rtm:intersectsWith    a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:range 
 rtm:union             a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:range rtm:Scope ; rdfs:label "union (disjunctive composition; rare)" .
 rtm:asotHeldBy        a owl:ObjectProperty ; rdfs:domain rtm:Scope ; rdfs:label "asotHeldBy (org IRI; ADR-030)" .
 
+# --- requirement structure + verification (SysMLv2 anchoring) ---------------
+
+rtm:RequirementDefinition
+    a owl:Class ;
+    rdfs:subClassOf rtm:Requirement ;
+    rdfs:label "RequirementDefinition (class of requirements; analogous to oslc_rm:RequirementCollection)" .
+
+rtm:hasRequirement a owl:ObjectProperty ; rdfs:label "hasRequirement (element bears this requirement)" .
+
+rtm:verifies
+    a owl:ObjectProperty ;
+    rdfs:label "verifies (TestCase → Requirement; complementary to rtm:addresses for SysMLv2 VerificationCaseUsage)" .
+
+rtm:Constraint
+    a owl:Class ;
+    rdfs:label "Constraint (model-level constraint statement; from SysMLv2 omg-sysml:Constraint)" .
+
+rtm:TestCase
+    a owl:Class ;
+    rdfs:subClassOf rtm:Artifact ;
+    rdfs:label "TestCase (test-as-evidence; cross-classified with oslc_qm:TestCase and omg-sysml:VerificationCaseUsage)" .
+
 # --- external URI vocabulary (Design Spec §4.4, ADR-022) --------------------
 
 rtm:Activity

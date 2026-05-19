@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# omg-sysml subset (hand-curated for slice 7). Terms enumerated in
+# manifest.yaml. Cross-class equivalences (RequirementUsage ↔ rtm:Requirement
+# etc.) are declared inline per SysMLv2 Ingestion Contract §5.
+
+@prefix omg-sysml: <https://www.omg.org/spec/SysML/20240801/SysML#> .
+@prefix rtm:       <https://flexo-rtm.dev/ontology#> .
+@prefix rdf:       <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:      <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:       <http://www.w3.org/2002/07/owl#> .
+
+omg-sysml:Element                a owl:Class ; rdfs:label "Element" .
+omg-sysml:RequirementUsage       a owl:Class ; rdfs:subClassOf omg-sysml:Element ; owl:equivalentClass rtm:Requirement ; rdfs:label "RequirementUsage" .
+omg-sysml:RequirementDefinition  a owl:Class ; rdfs:subClassOf omg-sysml:Element ; owl:equivalentClass rtm:RequirementDefinition ; rdfs:label "RequirementDefinition" .
+omg-sysml:PartUsage              a owl:Class ; rdfs:subClassOf omg-sysml:Element , rtm:Artifact ; rdfs:label "PartUsage (designed component instance)" .
+omg-sysml:PartDefinition         a owl:Class ; rdfs:subClassOf omg-sysml:Element , rtm:Artifact ; rdfs:label "PartDefinition" .
+omg-sysml:Action                 a owl:Class ; rdfs:subClassOf omg-sysml:Element , rtm:Activity ; rdfs:label "Action (SysMLv2-native activity)" .
+omg-sysml:Constraint             a owl:Class ; rdfs:subClassOf omg-sysml:Element ; owl:equivalentClass rtm:Constraint ; rdfs:label "Constraint" .
+omg-sysml:PortUsage              a owl:Class ; rdfs:subClassOf omg-sysml:Element ; rdfs:label "PortUsage" .
+omg-sysml:Connection             a owl:Class ; rdfs:subClassOf omg-sysml:Element ; rdfs:label "Connection" .
+omg-sysml:VerificationCaseUsage  a owl:Class ; rdfs:subClassOf omg-sysml:Element ; owl:equivalentClass rtm:TestCase ; rdfs:label "VerificationCaseUsage" .
+
+omg-sysml:elementId      a owl:DatatypeProperty ; rdfs:label "elementId (stable identity)" .
+omg-sysml:qualifiedName  a owl:DatatypeProperty ; rdfs:label "qualifiedName (human-readable path)" .
+omg-sysml:owner          a owl:ObjectProperty   ; rdfs:label "owner (containment)" .
+omg-sysml:satisfies      a owl:ObjectProperty   ; owl:equivalentProperty rtm:addresses ; rdfs:label "satisfies — maps to rtm:addresses per slice-3 epistemic rename" .
+omg-sysml:verifies       a owl:ObjectProperty   ; owl:equivalentProperty rtm:addresses ; rdfs:label "verifies — maps to rtm:addresses (verification-edge subtype; SysMLv2 distinction preserved in source graph)" .
+omg-sysml:requirement    a owl:AnnotationProperty ; rdfs:subPropertyOf rtm:hasRequirement ; rdfs:label "requirement (annotation)" .
+omg-sysml:assumes        a owl:AnnotationProperty ; rdfs:label "assumes (preserved verbatim)" .

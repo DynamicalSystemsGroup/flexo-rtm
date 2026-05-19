@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SysMLv2 VerificationCaseUsage fixture with an omg-sysml:verifies link.
+# In flexo-rtm's mapping both 'satisfies' and 'verifies' contribute to
+# rtm:addresses; the SysMLv2 distinction is preserved in the source graph.
+
+@prefix omg-sysml: <https://www.omg.org/spec/SysML/20240801/SysML#> .
+@prefix sat:       <https://rtm.example/adcs/> .
+
+sat:VC-Pointing
+    a omg-sysml:VerificationCaseUsage ;
+    omg-sysml:elementId     "VC-Pointing" ;
+    omg-sysml:qualifiedName "ADCS::VC-Pointing" ;
+    omg-sysml:verifies      sat:REQ-001 .

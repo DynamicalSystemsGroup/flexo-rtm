@@ -1,6 +1,7 @@
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix earl: <http://www.w3.org/ns/earl#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix omg-sysml: <https://www.omg.org/spec/SysML/20240801/SysML#> .
 @prefix org: <http://www.w3.org/ns/org#> .
 @prefix oslc_qm: <http://open-services.net/ns/qm#> .
 @prefix oslc_rm: <http://open-services.net/ns/rm#> .
@@ -394,10 +395,80 @@ rtm:union a owl:ObjectProperty ;
     rdfs:domain rtm:Scope ;
     rdfs:range rtm:Scope .
 
+rtm:verifies a owl:ObjectProperty ;
+    rdfs:label "verifies (TestCase → Requirement; complementary to rtm:addresses for SysMLv2 VerificationCaseUsage)" .
+
 rtm:withinScope a owl:ObjectProperty ;
     rdfs:label "withinScope" ;
     rdfs:domain rtm:Policy ;
     rdfs:range rtm:Scope .
+
+omg-sysml:Action a owl:Class ;
+    rdfs:label "Action (SysMLv2-native activity)" ;
+    rdfs:subClassOf rtm:Activity,
+        omg-sysml:Element .
+
+omg-sysml:Connection a owl:Class ;
+    rdfs:label "Connection" ;
+    rdfs:subClassOf omg-sysml:Element .
+
+omg-sysml:Constraint a owl:Class ;
+    rdfs:label "Constraint" ;
+    rdfs:subClassOf omg-sysml:Element ;
+    owl:equivalentClass rtm:Constraint .
+
+omg-sysml:PartDefinition a owl:Class ;
+    rdfs:label "PartDefinition" ;
+    rdfs:subClassOf rtm:Artifact,
+        omg-sysml:Element .
+
+omg-sysml:PartUsage a owl:Class ;
+    rdfs:label "PartUsage (designed component instance)" ;
+    rdfs:subClassOf rtm:Artifact,
+        omg-sysml:Element .
+
+omg-sysml:PortUsage a owl:Class ;
+    rdfs:label "PortUsage" ;
+    rdfs:subClassOf omg-sysml:Element .
+
+omg-sysml:RequirementDefinition a owl:Class ;
+    rdfs:label "RequirementDefinition" ;
+    rdfs:subClassOf omg-sysml:Element ;
+    owl:equivalentClass rtm:RequirementDefinition .
+
+omg-sysml:RequirementUsage a owl:Class ;
+    rdfs:label "RequirementUsage" ;
+    rdfs:subClassOf omg-sysml:Element ;
+    owl:equivalentClass rtm:Requirement .
+
+omg-sysml:VerificationCaseUsage a owl:Class ;
+    rdfs:label "VerificationCaseUsage" ;
+    rdfs:subClassOf omg-sysml:Element ;
+    owl:equivalentClass rtm:TestCase .
+
+omg-sysml:assumes a owl:AnnotationProperty ;
+    rdfs:label "assumes (preserved verbatim)" .
+
+omg-sysml:elementId a owl:DatatypeProperty ;
+    rdfs:label "elementId (stable identity)" .
+
+omg-sysml:owner a owl:ObjectProperty ;
+    rdfs:label "owner (containment)" .
+
+omg-sysml:qualifiedName a owl:DatatypeProperty ;
+    rdfs:label "qualifiedName (human-readable path)" .
+
+omg-sysml:requirement a owl:AnnotationProperty ;
+    rdfs:label "requirement (annotation)" ;
+    rdfs:subPropertyOf rtm:hasRequirement .
+
+omg-sysml:satisfies a owl:ObjectProperty ;
+    rdfs:label "satisfies — maps to rtm:addresses per slice-3 epistemic rename" ;
+    owl:equivalentProperty rtm:addresses .
+
+omg-sysml:verifies a owl:ObjectProperty ;
+    rdfs:label "verifies — maps to rtm:addresses (verification-edge subtype; SysMLv2 distinction preserved in source graph)" ;
+    owl:equivalentProperty rtm:addresses .
 
 oslc_rm:Requirement a owl:Class ;
     rdfs:label "Requirement" ;
@@ -415,12 +486,22 @@ prov:Plan a owl:Class ;
 foaf:Agent a owl:Class ;
     rdfs:label "Agent" .
 
-rtm:Activity a owl:Class ;
-    rdfs:label "Activity (a process: sim run, model build, test exec, …)" ;
-    rdfs:subClassOf prov:Activity .
-
 rtm:Attribute a owl:Class ;
     rdfs:label "Attribute (key/value typed by the adapter)" .
+
+rtm:Constraint a owl:Class ;
+    rdfs:label "Constraint (model-level constraint statement; from SysMLv2 omg-sysml:Constraint)" .
+
+rtm:RequirementDefinition a owl:Class ;
+    rdfs:label "RequirementDefinition (class of requirements; analogous to oslc_rm:RequirementCollection)" ;
+    rdfs:subClassOf rtm:Requirement .
+
+rtm:TestCase a owl:Class ;
+    rdfs:label "TestCase (test-as-evidence; cross-classified with oslc_qm:TestCase and omg-sysml:VerificationCaseUsage)" ;
+    rdfs:subClassOf rtm:Artifact .
+
+rtm:hasRequirement a owl:ObjectProperty ;
+    rdfs:label "hasRequirement (element bears this requirement)" .
 
 org:Membership a owl:Class ;
     rdfs:label "Membership" .
@@ -428,8 +509,21 @@ org:Membership a owl:Class ;
 org:Organization a owl:Class ;
     rdfs:label "Organization" .
 
+rtm:Activity a owl:Class ;
+    rdfs:label "Activity (a process: sim run, model build, test exec, …)" ;
+    rdfs:subClassOf prov:Activity .
+
 rtm:Aspect a owl:Class ;
     rdfs:label "Aspect (an axis a requirement is judged along: functional, safety, performance, ...)" .
+
+earl:Assertion a owl:Class ;
+    rdfs:label "Assertion" .
+
+prov:Agent a owl:Class ;
+    rdfs:label "Agent" .
+
+rtm:AttestationStatus a owl:Class ;
+    rdfs:label "AttestationStatus (one of: pass, fail, deferred, deprecated)" .
 
 rtm:Requirement a owl:Class ;
     rdfs:label "Requirement" .
@@ -445,19 +539,6 @@ recorded only via rtm:SatisfactionAttestation (per ADR-021) — never inferred f
 addresses-edges alone. Following the Hawkins-Habli Assurance Claim Point split.""" ;
     rdfs:domain rtm:Artifact ;
     rdfs:range rtm:Requirement .
-
-earl:Assertion a owl:Class ;
-    rdfs:label "Assertion" .
-
-prov:Agent a owl:Class ;
-    rdfs:label "Agent" .
-
-rtm:Artifact a owl:Class ;
-    rdfs:label "Artifact (verification evidence)" ;
-    rdfs:subClassOf prov:Entity .
-
-rtm:AttestationStatus a owl:Class ;
-    rdfs:label "AttestationStatus (one of: pass, fail, deferred, deprecated)" .
 
 oslc_qm:TestResult a owl:Class ;
     rdfs:label "TestResult (result-as-evidence)" ;
@@ -475,11 +556,18 @@ rtm:Attestation a owl:Class ;
 rtm:ReproducibilityManifest a owl:Class ;
     rdfs:label "ReproducibilityManifest (enumerates every external URI a cert depends on)" .
 
+rtm:Artifact a owl:Class ;
+    rdfs:label "Artifact (verification evidence)" ;
+    rdfs:subClassOf prov:Entity .
+
 prov:Activity a owl:Class ;
     rdfs:label "Activity" .
 
 prov:Entity a owl:Class ;
     rdfs:label "Entity" .
+
+omg-sysml:Element a owl:Class ;
+    rdfs:label "Element" .
 
 rtm:Scope a owl:Class ;
     rdfs:label "Scope (named graph functioning as an ASOT)" .

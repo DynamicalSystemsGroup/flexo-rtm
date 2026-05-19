@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# sysmlv2-anchored profile — SysMLv2 Ingestion Contract §4.
+# Validates that an ingested model is well-formed omg-sysml: RDF.
+
+@prefix omg-sysml: <https://www.omg.org/spec/SysML/20240801/SysML#> .
+@prefix sh:        <http://www.w3.org/ns/shacl#> .
+@prefix xsd:       <http://www.w3.org/2001/XMLSchema#> .
+
+[] a sh:NodeShape ;
+    sh:targetClass omg-sysml:Element ;
+    sh:property [
+        sh:path omg-sysml:elementId ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Every SysMLv2 element requires a stable elementId"
+    ] ;
+    sh:property [
+        sh:path omg-sysml:qualifiedName ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Every SysMLv2 element requires a qualifiedName"
+    ] ;
+    sh:property [
+        sh:path omg-sysml:owner ;
+        sh:maxCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "An element has at most one owning element (containment hierarchy)"
+    ] .

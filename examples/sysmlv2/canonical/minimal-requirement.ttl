@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# Minimal SysMLv2 RequirementUsage fixture. Two requirements with the SysMLv2
+# elementId / qualifiedName / owner identity triple, plus one omg-sysml:satisfies
+# link to demonstrate that flexo-rtm's analysis layer can see SysMLv2 RDF as
+# the canonical internal form.
+
+@prefix omg-sysml: <https://www.omg.org/spec/SysML/20240801/SysML#> .
+@prefix sat:       <https://rtm.example/adcs/> .
+
+sat:REQ-001
+    a omg-sysml:RequirementUsage ;
+    omg-sysml:elementId     "REQ-001" ;
+    omg-sysml:qualifiedName "ADCS::REQ-001" ;
+    omg-sysml:owner         sat:ADCS-Subsystem .
+
+sat:REQ-002
+    a omg-sysml:RequirementUsage ;
+    omg-sysml:elementId     "REQ-002" ;
+    omg-sysml:qualifiedName "ADCS::REQ-002" ;
+    omg-sysml:owner         sat:ADCS-Subsystem .
+
+sat:ADCS-Subsystem
+    a omg-sysml:PartUsage ;
+    omg-sysml:elementId     "ADCS-Subsystem" ;
+    omg-sysml:qualifiedName "ADCS-Subsystem" .
+
+sat:Proof-REQ-001
+    a omg-sysml:PartUsage ;
+    omg-sysml:elementId     "Proof-REQ-001" ;
+    omg-sysml:qualifiedName "ADCS::Proof-REQ-001" ;
+    omg-sysml:satisfies     sat:REQ-001 .

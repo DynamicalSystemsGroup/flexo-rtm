@@ -150,4 +150,27 @@ vocabularies:
       - { iri: "oslc_qm:inconclusive", purpose: "→ rtm:status/deferred" }
       - { iri: "oslc_qm:error",        purpose: "→ rtm:status/fail" }
       - { iri: "oslc_qm:blocked",      purpose: "→ rtm:status/deferred" }
-  - { name: omg-sysml,    iri: "https://www.omg.org/spec/SysML/20240801/SysML#",                  source_file: ontology/imports/omg-sysml-v1.ttl,    extract_method: SLME,             extracted_classes: [], extracted_properties: [], extracted_individuals: [] }
+  - name: omg-sysml
+    iri: "https://www.omg.org/spec/SysML/20240801/SysML#"
+    source_file: ontology/imports/omg-sysml-v1.ttl
+    extract_method: hand-curated
+    target_extract_file: parsimony/extracts/omg-sysml-subset.ttl
+    extracted_classes:
+      - { iri: "omg-sysml:Element",               purpose: "root abstract class" }
+      - { iri: "omg-sysml:RequirementUsage",      purpose: "owl:equivalentClass rtm:Requirement (§5.1)" }
+      - { iri: "omg-sysml:RequirementDefinition", purpose: "owl:equivalentClass rtm:RequirementDefinition" }
+      - { iri: "omg-sysml:PartUsage",             purpose: "subClass rtm:Artifact (component instance)" }
+      - { iri: "omg-sysml:PartDefinition",        purpose: "subClass rtm:Artifact" }
+      - { iri: "omg-sysml:Action",                purpose: "subClass rtm:Activity" }
+      - { iri: "omg-sysml:Constraint",            purpose: "owl:equivalentClass rtm:Constraint" }
+      - { iri: "omg-sysml:PortUsage",             purpose: "ports (for connection lineage)" }
+      - { iri: "omg-sysml:Connection",            purpose: "connections between elements" }
+      - { iri: "omg-sysml:VerificationCaseUsage", purpose: "owl:equivalentClass rtm:TestCase" }
+    extracted_properties:
+      - { iri: "omg-sysml:elementId",     purpose: "stable identity across re-ingestions (§7)" }
+      - { iri: "omg-sysml:qualifiedName", purpose: "human-readable path" }
+      - { iri: "omg-sysml:owner",         purpose: "containment hierarchy" }
+      - { iri: "omg-sysml:satisfies",     purpose: "SysMLv2 verification edge → rtm:addresses (slice-3 precedent)" }
+      - { iri: "omg-sysml:verifies",      purpose: "SysMLv2 verifies edge → rtm:addresses (slice-3 precedent applied)" }
+      - { iri: "omg-sysml:requirement",   purpose: "annotation property; subPropertyOf rtm:hasRequirement" }
+      - { iri: "omg-sysml:assumes",       purpose: "assumption annotation (preserved as-is)" }
