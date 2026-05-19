@@ -28,6 +28,7 @@ from enum import IntEnum
 from rdflib import RDF, Graph, Namespace, URIRef
 
 RTM = Namespace("https://flexo-rtm.dev/ontology#")
+PROV = Namespace("http://www.w3.org/ns/prov#")
 
 
 class CertificationLevel(IntEnum):
@@ -48,10 +49,25 @@ _REPRODUCIBILITY_MODES = frozenset(
 _QUALIFIED_ROLE_MODE = URIRef(str(RTM) + "audit-mode-qualified-role-review")
 
 
+def _is_invalidated(att: URIRef, attestations: Graph) -> bool:
+    """An attestation is invalidated when any ``prov:wasInvalidatedBy`` triple
+    points at it. Per the constructor's deprecate workflow and the PROV
+    pattern for immutable-store invalidation (we never mutate the original
+    attestation; we add an event-pointing triple instead).
+    """
+    return any(attestations.triples((att, PROV.wasInvalidatedBy, None)))
+
+
 def _attestations_targeting(scope: URIRef, attestations: Graph, *, of_type: URIRef) -> set[URIRef]:
-    """Subjects of attestations of ``of_type`` whose ``rtm:attests`` is ``scope``."""
+    """Subjects of attestations of ``of_type`` whose ``rtm:attests`` is ``scope``
+    and which have NOT been invalidated (no ``prov:wasInvalidatedBy`` triple).
+    """
     candidates: set[URIRef] = {URIRef(str(s)) for s in attestations.subjects(RDF.type, of_type)}
-    return {s for s in candidates if (s, RTM.attests, scope) in attestations}
+    return {
+        s
+        for s in candidates
+        if (s, RTM.attests, scope) in attestations and not _is_invalidated(s, attestations)
+    }
 
 
 def _has_mode(att: URIRef, attestations: Graph, *, mode: URIRef | frozenset[URIRef]) -> bool:

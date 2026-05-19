@@ -24,6 +24,7 @@ from oracle import __version__
 from oracle.analysis.coverage import compute_coverage
 from oracle.analysis.emit.transcript import TranscriptRecorder
 from oracle.canonicalize import canonicalize_graph
+from oracle.constructor.cli import constructor_app
 from oracle.models import AuditReport
 from oracle.uri.manifest import emit_manifest
 
@@ -32,6 +33,7 @@ app = typer.Typer(
     help="Verifiable self-certification oracle for bidirectional requirements traceability.",
     no_args_is_help=True,
 )
+app.add_typer(constructor_app, name="constructor")
 
 
 def _version_callback(value: bool) -> None:
