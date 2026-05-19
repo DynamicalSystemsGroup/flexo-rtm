@@ -17,6 +17,28 @@ The implementation of `flexo-rtm` — a verifiable self-certification oracle for
 | [`/Users/z/.claude/plans/harmonic-puzzling-patterson.md`](/Users/z/.claude/plans/harmonic-puzzling-patterson.md) | The v0.1 build roadmap; 11 slices; this is the working plan |
 | ADCS prototype: [/Users/z/Documents/GitHub/ADCS-lifecycle-demo](/Users/z/Documents/GitHub/ADCS-lifecycle-demo) | Regression corpus source (slice 3); ontology framework half lifts here |
 
+## Skill routing
+
+Role-scoped Claude skills wrap the CLI; each translates natural-language requests into correctly-constructed CLI invocations under a **two-gate verbatim-reflection contract** (the user reviews the proposed write before it runs, and reviews what landed after). The skills live under [`.claude/skills/`](.claude/skills/):
+
+| Skill | When to use | Path scope | CLI surface |
+|---|---|---|---|
+| [`flexo-rtm-engineer`](.claude/skills/flexo-rtm-engineer.md) | Engineer doing primary engineering work — making decisions, recording requirements / artifacts / addresses-edges / attestations. Triggers: "log this", "attest", "new requirement / artifact", "link", "deprecate", "start/stop tandem logging". | `~/.flexo-rtm/sessions/**` | `constructor` (new-requirement, new-artifact, link, attest, deprecate, status, show) — NEVER `push`. |
+| [`flexo-rtm-reviewer`](.claude/skills/flexo-rtm-reviewer.md) | Engineer (or designated reviewer) gating the local-session → remote-Flexo boundary. Triggers: "review my session", "ready to push", "what am I about to push", "pre-push check". | `~/.flexo-rtm/sessions/**/archive/**` | `constructor status / show / push`; `certify`. Amendments route to `flexo-rtm-engineer`; drift routes to `flexo-rtm-reconcile`. |
+| [`flexo-rtm-auditor`](.claude/skills/flexo-rtm-auditor.md) | Auditor evaluating a scope's coverage, attestation health, deprecation status. Read-only by construction. Triggers: "audit this scope", "coverage of", "certification status", "run the audit report". | `[]` (no writes) | `certify`, `parsimony`, `constructor status / show`. Resolutions route to `flexo-rtm-engineer`; drift to `flexo-rtm-reconcile`. |
+| [`flexo-rtm-reconcile`](.claude/skills/flexo-rtm-reconcile.md) | Role-agnostic conflict identification + resolution between local and other sources (remote branch, OSLC-RM, another engineer's session, an audit finding). Surfaces the four exhaustive options (AcceptA / AcceptB / AcceptBoth / Deferred); **never picks**. Triggers: "reconcile", "drift", "conflict between", "merge my session with main". | `~/.flexo-rtm/reconciliation/**` (append-only) | Read-side: `constructor show / status`, `certify`. Writes: only `.trig` records under allowed-paths. Follow-up CLI writes route to `flexo-rtm-engineer`. |
+
+**Inherited from** [`MVC Pattern from RIME TRL ANT`](https://github.com/DynamicalSystemsGroup/flexo-rtm-research/wiki/MVC-Pattern-from-RIME-TRL-ANT). Specifically: the skill never edits RDF directly (the CLI is the sole mutator); the skill walks role-scoped catechisms; the skill orchestrates the commit / push (the CLI doesn't). flexo-rtm tightens the reference pattern's single review-gate to **two gates** because writes touch audit-critical attestation triples — the LLM + CLI are not assumed to faithfully capture the user's intent.
+
+## Permission model
+
+Two tiers, matching the local-vs-remote split in the CLI:
+
+- **Autonomous (locally reversible).** The engineer skill's writes land in `~/.flexo-rtm/sessions/<id>/state.trig` — the local working set. SHACL gates run against an in-memory rdflib graph. Both gates of the verbatim-reflection contract still apply, but the action is reversible (deprecate or amend) and confined to the engineer's machine.
+- **Require explicit user authorization (non-local, observable to others).** `flexo-rtm constructor push` is the only action in this tier — it makes the engineer's session state visible to the shared Flexo branch. Always gated by the reviewer skill's two-gate confirmation: GATE 1 confirms what's about to push; GATE 2 reads back what landed on the remote.
+
+The reconcile skill's writes (under `~/.flexo-rtm/reconciliation/**`) are append-only: a mistaken decision is corrected by a new record, never by overwriting. The auditor writes nothing at all.
+
 ## Engineering rules (from [CONTRIBUTING.md](CONTRIBUTING.md))
 
 **Sparseness:** minimum code per failing test; no abstractions for hypothetical future use; no reimplementing `rdflib` / `pyshacl` / `pydantic` / `cryptography` / `sigstore` / `in-toto-attestation`.
