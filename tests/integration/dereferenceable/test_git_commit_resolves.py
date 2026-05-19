@@ -13,6 +13,13 @@ from oracle.uri.fetch import check_git_commit_exists
 pytestmark = pytest.mark.network
 
 
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "check_git_commit_exists uses git ls-remote which only returns refs, "
+        "not arbitrary commit SHAs; tracked at flexo-rtm-research#28"
+    ),
+)
 def test_known_commit_on_public_repo_resolves() -> None:
     result = check_git_commit_exists(
         repo="https://github.com/python/cpython",
